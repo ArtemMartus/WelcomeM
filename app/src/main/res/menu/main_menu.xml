@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/helloNameMenuItem"
+        android:checkable="false"
+        android:enabled="true"
+        android:title="@string/helloString"
+        android:visible="true"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/settingsMenuItem"
+        android:title="@string/settingsString" />
+    <item
+        android:id="@+id/logoutMenuItem"
+        android:title="@string/logoutString" />
+</menu>

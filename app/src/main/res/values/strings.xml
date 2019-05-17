@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Welcome M</string>
+    <string name="helloString">Привіт,</string>
+    <string name="scanQRString">Сканувати накладну</string>
+    <string name="pathwayString">Маршрут</string>
+    <string name="orderHistoryString">Історія замовлень</string>
+    <string name="workHoursString">Робочий час</string>
+    <string name="settingsString">Налаштування</string>
+    <string name="logoutString">Вийти</string>
+    <string name="loginString">Логін</string>
+    <string name="passwordString">Пароль</string>
+    <string name="rememberString">Запам\'ятати</string>
+    <string name="signInString">Увійти</string>
+    <string name="sumString">Сумма:</string>
+    <string name="addressString">Адресса:</string>
+    <string name="deliveredString">Доставлено:</string>
+    <string name="clientNameString">Замовник:</string>
+    <string name="clientTelephoneString">Моб. номер клієнта:</string>
+    <string name="clientBalanceString">Баланс клієнта:</string>
+    <string name="managerNameString">Менеджер:</string>
+    <string name="managerTelephoneString">Моб. номер менеджера:</string>
+</resources>
