@@ -1,5 +1,6 @@
 package com.upsage.welcomem.activities;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.EmployeeData;
+import com.upsage.welcomem.data.OvertimeHistory;
 import com.upsage.welcomem.data.WorkHours;
 import com.upsage.welcomem.data.entries.WorkHoursEntry;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
@@ -17,11 +19,13 @@ import com.upsage.welcomem.utils.ThemeUtil;
 
 public class WorkHoursActivity extends AppCompatActivity implements OnTaskCompleted {
 
-    WorkHours workHours;
-    ListView listView;
-    TextView titleTextView;
+    private WorkHours workHours;
+    private ListView listView;
+    private TextView titleTextView;
+    private OvertimeHistory overtimeHistory;
+    private TextView monthOvertimeTextView;
 
-    //todo add overall month overtime textview
+
     //todo remake workHours system to one that counts overtime $(last_order_delivered) - 18:00
 
     @Override
@@ -34,10 +38,14 @@ public class WorkHoursActivity extends AppCompatActivity implements OnTaskComple
         listView = findViewById(R.id.workHoursListView);
         titleTextView = findViewById(R.id.workHoursTitleTextView);
 
+        monthOvertimeTextView = findViewById(R.id.monthOvertimeTextView);
+        monthOvertimeTextView.setText(R.string.loadingString);
+
         SharedPreferences userPreferences = getSharedPreferences("user", 0);
         EmployeeData employee = new EmployeeData(userPreferences);
         workHours = new WorkHours(employee.getId(), this);
         workHours.test(this);
+
         titleTextView.setText(R.string.loadingString);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             WorkHoursEntry item = workHours.getItem(position);
@@ -50,8 +58,12 @@ public class WorkHoursActivity extends AppCompatActivity implements OnTaskComple
             }
         });
 
+        overtimeHistory = new OvertimeHistory(employee.getId());
+        overtimeHistory.test(this);
+
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onTaskCompleted(Object o) {
         if (workHours.ready()) {
@@ -59,6 +71,13 @@ public class WorkHoursActivity extends AppCompatActivity implements OnTaskComple
             listView.setAdapter(workHours);
         } else {
             titleTextView.setText(R.string.loadingString);//never called
+        }
+
+        if (overtimeHistory.ready()) {
+            monthOvertimeTextView.setText(getString(R.string.monthOvertimeString)
+                    + overtimeHistory.getMonthOvertime());
+        } else {
+            monthOvertimeTextView.setText(R.string.loadingString);
         }
     }
 }

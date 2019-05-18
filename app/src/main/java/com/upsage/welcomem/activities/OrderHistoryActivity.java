@@ -34,15 +34,16 @@ public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCom
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
+
         recyclerView = findViewById(R.id.ordersHistoryRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL));
 
         titleTextView = findViewById(R.id.orderHistoryTitleTextView);
         titleTextView.setText(R.string.loadingString);
 
         SharedPreferences userPreferences = getSharedPreferences("user", 0);
         EmployeeData employee = new EmployeeData(userPreferences);
+
         ordersInHistory = new OrdersInHistory(employee.getId(), this, this);
         ordersInHistory.test(this);
 
@@ -62,7 +63,7 @@ public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCom
             titleTextView.setText(R.string.orderHistoryString);
             recyclerView.setAdapter(ordersInHistory);
         } else {
-            titleTextView.setText(R.string.loadingString);//never called
+            titleTextView.setText(R.string.loadingString);
         }
     }
 

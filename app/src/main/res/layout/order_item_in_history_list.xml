@@ -1,49 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
     android:orientation="vertical"
     android:padding="8dp">
 
     <TextView
         android:id="@+id/orderHistoryIdTextView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
         android:text="123"
-        app:layout_constraintEnd_toStartOf="@+id/orderHistoryClientNameTextView"
-        app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textAlignment="center" />
 
-    <TextView
-        android:id="@+id/orderHistoryClientNameTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        android:minEms="4"
-        android:text="Іваненко Іван Іванович"
-        app:layout_constraintEnd_toStartOf="@+id/deliveryDateHistoryTextView"
-        app:layout_constraintHorizontal_weight="5"
-        app:layout_constraintStart_toEndOf="@+id/orderHistoryIdTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/deliveryDateHistoryTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="17/05/2019 13:13"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="7"
-        app:layout_constraintStart_toEndOf="@+id/orderHistoryClientNameTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/orderHistoryClientNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:minEms="4"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="Іван"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/deliveryDateHistoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/orderHistoryClientNameTextView"
+            android:text="17/05/2019 13:13"
+            android:textAlignment="textEnd" />
+    </RelativeLayout>
+
+</LinearLayout>
