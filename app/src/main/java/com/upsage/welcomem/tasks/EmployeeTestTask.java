@@ -5,17 +5,13 @@ import android.util.Log;
 
 import com.upsage.welcomem.data.EmployeeData;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.utils.SQLSingleton;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData> {
-    private final static String host = "jdbc:mysql://remotemysql.com:3306/XN5vmpIBV5";
-    private final static String db_user = "XN5vmpIBV5";
-    private final static String db_password = "3KW9meu7IL";
     private final OnTaskCompleted receiver;
 
     public EmployeeTestTask(OnTaskCompleted receiver) {
@@ -30,18 +26,17 @@ public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData
         if (args.length > 0 && args[0] != null) {
             EmployeeData credential = args[0];
             try {
-                Connection connection = DriverManager.getConnection(host, db_user, db_password);
                 Log.i(TAG, "connection successful");
 
                 PreparedStatement statement;
                 if(credential.isNotEmpty()) {
-                    statement = connection.prepareStatement
+                    statement = SQLSingleton.prepareStatement
                             ("SELECT * from employees where login =? and password =?");
                     Log.i(TAG, "created statement for login and password");
                     statement.setString(1, credential.getLogin());
                     statement.setString(2, credential.getPassword());
                 } else {
-                    statement = connection.prepareStatement
+                    statement = SQLSingleton.prepareStatement
                             ("SELECT * from employees where id =?");
                     Log.i(TAG, "created statement for id");
                     statement.setInt(1, credential.getId());
@@ -73,7 +68,6 @@ public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData
                 }
                 resultSet.close();
                 statement.close();
-                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

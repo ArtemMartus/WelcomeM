@@ -5,9 +5,8 @@ import android.util.Log;
 
 import com.upsage.welcomem.data.entries.OrderInHistoryEntry;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.utils.SQLSingleton;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,9 +16,6 @@ import java.util.List;
 
 public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<OrderInHistoryEntry>> {
 
-    private final static String host = "jdbc:mysql://remotemysql.com:3306/XN5vmpIBV5";
-    private final static String db_user = "XN5vmpIBV5";
-    private final static String db_password = "3KW9meu7IL";
     private final static String TAG = "Get Order History Task";
     private OnTaskCompleted receiver;
 
@@ -33,9 +29,8 @@ public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<Orde
         if (args.length > 0 && args[0] != null) {
             Integer employeeId = args[0];
             try {
-                Connection connection = DriverManager.getConnection(host, db_user, db_password);
                 Log.i(TAG, "connection successful");
-                PreparedStatement statement = connection.prepareStatement
+                PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT id,client_id,delivery_date from orders where courier_id =? and delivery_date is not null order by delivery_date asc");
                 Log.i(TAG, "created statement");
                 statement.setInt(1, employeeId);
@@ -47,9 +42,8 @@ public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<Orde
                         int clientId = resultSet.getInt("client_id");
                         Timestamp delivery = resultSet.getTimestamp("delivery_date");
                         String clientName = "";
-                        //get client via another sql request
                         {
-                            PreparedStatement clientStatement = connection.prepareStatement(
+                            PreparedStatement clientStatement = SQLSingleton.prepareStatement(
                                     "select name from clients where id = ?");
                             clientStatement.setInt(1, clientId);
                             ResultSet clientSet = clientStatement.executeQuery();
@@ -76,7 +70,6 @@ public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<Orde
                 }
                 resultSet.close();
                 statement.close();
-                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
                 orders = null;

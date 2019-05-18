@@ -64,6 +64,7 @@ public class Order implements OnTaskCompleted {
             Log.e("Order load()", "Can't load order with invalid id");
             return false;
         }
+        /*
         SharedPreferences orderPreferences = context.getSharedPreferences("order_" + id, 0);
 
         clientId = orderPreferences.getInt("clientId",-1);
@@ -82,8 +83,12 @@ public class Order implements OnTaskCompleted {
             test((OnTaskCompleted) context);
         else
             test(null);
+*/
+        return ready();
+    }
 
-        return true;
+    public boolean ready() {
+        return clientId != -1 && managerId != -1;
     }
 
     void save() {

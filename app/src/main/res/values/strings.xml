@@ -35,4 +35,8 @@
     <string name="orderIdString">№</string>
     <string name="sqlErrorRetryString">Виникла помилка при завантаженні</string>
     <string name="overallTimeString">Всього часу:</string>
+    <string name="pathwaysString">Замовлення, що очікують доставки</string>
+    <string name="payInProcessString">Оплата у процессі…</string>
+    <string name="paymentMadeString">Успішно сплачено</string>
+    <string name="waitUntilItLoadsString">Зачекайте поки закінчиться завантаження данних</string>
 </resources>

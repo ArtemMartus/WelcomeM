@@ -71,10 +71,10 @@ public class EmployeeData implements OnTaskCompleted {
 
         Log.d("EmployeeData load()", "Downloading employee data asynchronously");
 
-        /*if (orderPreferences.getInt("id", -1) == -1)
+        if (orderPreferences.getInt("id", -1) == -1)
             test((OnTaskCompleted) context);
         else
-            test(null);*/
+            test(null);
 
         return ready();
     }

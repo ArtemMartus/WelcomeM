@@ -59,8 +59,7 @@ public class Client implements DatabasePojo {
             Log.e("Client load()", "Can't load order with invalid id");
             return false;
         }
-        SharedPreferences orderPreferences = context.getSharedPreferences("client_" + id, 0);
-        //id = orderPreferences.getInt("id",-1);
+        /*SharedPreferences orderPreferences = context.getSharedPreferences("client_" + id, 0);
         name = orderPreferences.getString("name", "");
         surname = orderPreferences.getString("surname", "");
         address = orderPreferences.getString("address", "");
@@ -70,11 +69,11 @@ public class Client implements DatabasePojo {
 
         Log.d("Client load()", "Downloading client data asynchronously");
 
-        /*if (orderPreferences.getInt("id", -1) == -1)
+        if (orderPreferences.getInt("id", -1) == -1)
             test((OnTaskCompleted) context);
         else
-            test(null);*/
-
+            test(null);
+*/
         return ready();
     }
 

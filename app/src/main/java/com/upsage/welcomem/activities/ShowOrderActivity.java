@@ -18,15 +18,14 @@ import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.Client;
 import com.upsage.welcomem.data.EmployeeData;
 import com.upsage.welcomem.data.Order;
-import com.upsage.welcomem.data.Product;
+import com.upsage.welcomem.data.Products;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.tasks.PaymentTask;
 import com.upsage.welcomem.utils.ThemeStyle;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import java.util.List;
 
 public class ShowOrderActivity extends AppCompatActivity implements OnTaskCompleted {
     private final static String TAG = "Show Order Activity";
@@ -46,7 +45,8 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
     Order order;
     Client client;
     EmployeeData manager;
-    List<Product> products;
+    Products products;
+    Double sum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,21 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
         orderLayout = findViewById(R.id.orderShowLinearLayout);
 
         payOrderButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+            if (sum == null || sum <= 0 || client == null
+                    || !client.ready() || order == null
+                    || order.getId() == null || order.getClientId() == null
+                    || !order.ready()) {
+                Toast.makeText(this, R.string.waitUntilItLoadsString, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            payOrderButton.setEnabled(false);
+            PaymentTask task = new PaymentTask(this);
+            Toast.makeText(this, R.string.payInProcessString, Toast.LENGTH_SHORT).show();
+            Double newBalance = client.getBalance() - sum;
+
+            task.execute(order.getId().doubleValue()
+                    , order.getClientId().doubleValue()
+                    , newBalance);
         });
 
         orderAddressTextView.setOnClickListener(v -> {
@@ -104,7 +118,23 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
     @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
     @Override
     public void onTaskCompleted(Object o) {
+        boolean show_products = true;
+        boolean show_manager = true;
+        boolean show_client = true;
 
+        if (o instanceof Integer) { /// this magic code is used by payButton to make it reload order payed date
+            Integer integer = (Integer) o;
+            if (integer == 3) {
+                Toast.makeText(this, R.string.paymentMadeString, Toast.LENGTH_SHORT).show();
+                order.setClientId(-1);
+                clientNameTextView.setText(R.string.loadingString);
+                clientBalanceTextView.setText(R.string.loadingString);
+                client.setBalance(-1.0);
+                client.setTelNumber("");
+                client.test(this);
+                order.test(this);
+            }
+        }
         if (order.getClientId().equals(order.getManagerId()) && order.getManagerId() == -1) {
             Toast.makeText(this, R.string.incorrectQRString, Toast.LENGTH_SHORT).show();
             finish();
@@ -113,41 +143,25 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
 
         if (client == null) {
             client = new Client(order.getClientId());
-            if (!client.load(ShowOrderActivity.this))
+            if (!client.load(this)) {
                 client.test(this);
+            }
         }
 
         if (manager == null) {
             manager = new EmployeeData(order.getManagerId());
-            if (!manager.load(ShowOrderActivity.this))
+            if (!manager.load(this)) {
                 manager.test(this);
+            }
         }
-
-        boolean show_products = true;
-        boolean show_manager = true;
-        boolean show_client = true;
 
         if (products == null) {
-            products = new LinkedList<>();
-            for (String part : order.getProductsId().split(" ")) {
-                try {
-                    Product product = new Product(Integer.parseInt(part));
-                    if (!product.load(ShowOrderActivity.this))
-                        product.test(this);
-                    products.add(product);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("Show Order Activity", "Some error in products string THIS_PART ain't integer-[" + part + "]");
-                }
-            }
+            products = new Products(order.getProductsId());
+            products.test(this);
         }
 
-        for (Product p : products) {
-            if (!p.ready()) {
-                show_products = false; // We must wait until all products are loaded from database or cache
-                break;
-            }
-        }
+        if (!products.ready())
+            show_products = false;
         if (!manager.ready())
             show_manager = false;
         if (!client.ready())
@@ -159,13 +173,14 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
             orderPaidTextView.setVisibility(View.VISIBLE);
             orderPaidTextView.setText(getString(R.string.deliveredString) +
                     new SimpleDateFormat("dd/MM/yyyy HH:ss").format(order.getDeliveryDate()));
-        } else if (orderPaidTextView != null && orderLayout != null)
-            orderLayout.removeView(orderPaidTextView);
+        }
+
 
         if (show_client) {
             clientNameTextView.setText(getString(R.string.clientNameString) + client.toString());
             clientTelephoneTextView.setText(getString(R.string.clientTelephoneString) + client.getTelNumber());
-            clientBalanceTextView.setText(getString(R.string.clientBalanceString) + client.getBalance());
+            DecimalFormat df = new DecimalFormat("#.00");
+            clientBalanceTextView.setText(getString(R.string.clientBalanceString) + df.format(client.getBalance()));
         } else {
             clientNameTextView.setText(R.string.loadingString);
             clientTelephoneTextView.setText(R.string.loadingString);
@@ -183,25 +198,18 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
         }
 
         if (show_products) {
-            String productsInfo = "";
-            Double sum = 0.0;
-            for (Product p : products) {
-                productsInfo += p.asString() + "\n";
-                sum += p.getFinalPrice();
-            }
+            String productsInfo = products.getProductsInfo();
+            sum = products.getPrice();
             productsTextView.setText(productsInfo);
 
-            {
-                DecimalFormat df = new DecimalFormat("#.00");
-                sumTextView.setText(getString(R.string.sumString) + df.format(sum) + order.getCurrency());
-                //sumTextView.setText(getString(R.string.sumString) + order.getSum().toString() + order.getCurrency());
-            }
+
+            DecimalFormat df = new DecimalFormat("#.00");
+            sumTextView.setText(getString(R.string.sumString) + df.format(sum) + order.getCurrency());
+
         } else {
             productsTextView.setText(R.string.loadingString);
             sumTextView.setText(R.string.loadingString);
         }
         orderAddressTextView.setText(getString(R.string.addressString) + order.getDeliveryAddress());
-
-        //Toast.makeText(this, "Completed!", Toast.LENGTH_SHORT).show();
     }
 }

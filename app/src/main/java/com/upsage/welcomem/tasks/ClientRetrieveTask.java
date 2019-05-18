@@ -5,9 +5,8 @@ import android.util.Log;
 
 import com.upsage.welcomem.data.Client;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.utils.SQLSingleton;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,9 +28,10 @@ public class ClientRetrieveTask extends AsyncTask<Client,Void,Client>  {
         if (args.length > 0 && args[0] != null) {
             Client clientData = args[0];
             try {
-                Connection connection = DriverManager.getConnection(host, db_user, db_password);
+
+//                Connection connection = DriverManager.getConnection(host, db_user, db_password);
                 Log.i(TAG, "connection successful");
-                PreparedStatement statement = connection.prepareStatement
+                PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT * from clients where id =?");
                 Log.i(TAG, "created statement");
                 statement.setInt(1, clientData.getId());
@@ -50,7 +50,7 @@ public class ClientRetrieveTask extends AsyncTask<Client,Void,Client>  {
                 }
                 resultSet.close();
                 statement.close();
-                connection.close();
+//                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
