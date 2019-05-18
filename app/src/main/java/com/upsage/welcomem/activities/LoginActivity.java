@@ -1,7 +1,5 @@
 package com.upsage.welcomem.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,9 +9,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.upsage.welcomem.OnTaskCompleted;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.EmployeeData;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 

@@ -1,7 +1,6 @@
 package com.upsage.welcomem.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -12,12 +11,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.upsage.welcomem.OnTaskCompleted;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.Client;
 import com.upsage.welcomem.data.EmployeeData;
 import com.upsage.welcomem.data.Order;
 import com.upsage.welcomem.data.Product;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.utils.ThemeStyle;
 import com.upsage.welcomem.utils.ThemeUtil;
 
@@ -97,8 +98,15 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onTaskCompleted(Object o) {
+
+        if (order.getClientId().equals(order.getManagerId()) && order.getManagerId() == -1) {
+            Toast.makeText(this, R.string.incorrectQRString, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         if (client == null) {
             client = new Client(order.getClientId());
@@ -120,7 +128,6 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("Show Order Activity", "Some error in products string THIS_PART ain't integer-[" + part + "]");
-                    continue;
                 }
             }
         } else {
@@ -162,6 +169,6 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
         }
         orderAddressTextView.setText(getString(R.string.addressString) + order.getDeliveryAddress());
 
-        Toast.makeText(this, "Completed!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Completed!", Toast.LENGTH_SHORT).show();
     }
 }

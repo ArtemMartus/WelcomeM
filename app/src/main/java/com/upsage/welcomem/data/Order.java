@@ -1,17 +1,13 @@
 package com.upsage.welcomem.data;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.upsage.welcomem.OnTaskCompleted;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.OrderRetrieveTask;
 
 import java.sql.Timestamp;
-import java.util.Map;
 
 public class Order implements OnTaskCompleted {
 

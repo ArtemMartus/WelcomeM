@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.upsage.welcomem.OnTaskCompleted;
+import com.upsage.welcomem.interfaces.DatabasePojo;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.ClientRetrieveTask;
-import com.upsage.welcomem.tasks.OrderRetrieveTask;
 
-import java.sql.Timestamp;
-
-public class Client implements OnTaskCompleted {
+public class Client implements DatabasePojo {
     private Integer id = -1;
     private String name = "";
     private String surname = "";
@@ -51,6 +49,7 @@ public class Client implements OnTaskCompleted {
                 receiver.onTaskCompleted(null);
     }
 
+    @Override
     public boolean load(Context context) {
         if (context == null) {
             Log.e("Client load()", "Can't load it because context is empty");
@@ -79,7 +78,8 @@ public class Client implements OnTaskCompleted {
         return true;
     }
 
-    void save() {
+    @Override
+    public void save() {
         if (receiver == null) {
             Log.e("Client save()", "Can't save it because receiver is empty so no context");
             return;
@@ -103,7 +103,9 @@ public class Client implements OnTaskCompleted {
                 .apply();
     }
 
-    void copy(Client o) {
+    @Override
+    public void copy(Object c) {
+        Client o = (Client) c;
         id = o.id;
         name = o.name;
         surname = o.surname;
@@ -113,6 +115,7 @@ public class Client implements OnTaskCompleted {
         balance = o.balance;
     }
 
+    @Override
     public void test(OnTaskCompleted receiver) {
         this.receiver = receiver;
         ClientRetrieveTask task = new ClientRetrieveTask(this);

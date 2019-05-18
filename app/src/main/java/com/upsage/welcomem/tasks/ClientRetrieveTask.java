@@ -3,8 +3,8 @@ package com.upsage.welcomem.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.upsage.welcomem.OnTaskCompleted;
 import com.upsage.welcomem.data.Client;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

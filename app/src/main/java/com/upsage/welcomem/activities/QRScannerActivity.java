@@ -1,22 +1,22 @@
 package com.upsage.welcomem.activities;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.zxing.Result;
-import com.upsage.welcomem.OnTaskCompleted;
+import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.Order;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -35,14 +35,10 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         super.onCreate(savedInstanceState);
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion >= android.os.Build.VERSION_CODES.M) {
-            if (checkPermission()) {
-                //Toast.makeText(getApplicationContext(), "Permission already granted", Toast.LENGTH_LONG).show();
 
-            } else {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (!checkPermission())
                 requestPermission();
-            }
         }
     }
 
@@ -54,39 +50,29 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
     }
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CAMERA:
-                if (grantResults.length > 0) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA) {
+            if (grantResults.length > 0) {
 
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (cameraAccepted){
-                        //Toast.makeText(getApplicationContext(), "Permission Granted, Now you can access camera", Toast.LENGTH_LONG).show();
-                    }else {
-                        //Toast.makeText(getApplicationContext(), "Permission Denied, You cannot access and camera", Toast.LENGTH_LONG).show();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (shouldShowRequestPermissionRationale(CAMERA)) {
-                                showMessageOKCancel("You need to allow access to both the permissions",
-                                        (dialog, which) -> {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermissions(new String[]{CAMERA},
-                                                        REQUEST_CAMERA);
-                                            }
-                                        });
-                                return;
-                            }
+                boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if (!cameraAccepted) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(CAMERA)) {
+                            showMessageOKCancel(getString(R.string.bothPermissionString),
+                                    (dialog, which) -> requestPermissions(new String[]{CAMERA},
+                                            REQUEST_CAMERA));
                         }
                     }
                 }
-                break;
+            }
         }
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(QRScannerActivity.this)
                 .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
+                .setPositiveButton(getString(R.string.okString), okListener)
+                .setNegativeButton(getString(R.string.cancelString), (dialog, which) -> finish())
                 .create()
                 .show();
     }
@@ -94,8 +80,8 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     @Override
     public void onResume() {
         super.onResume();
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion >= android.os.Build.VERSION_CODES.M) {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             if (checkPermission()) {
                 if(mScannerView == null) {
                     mScannerView = new ZXingScannerView(this);
@@ -130,7 +116,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
         try {
             mScannerView.stopCamera();
-            Toast.makeText(this, "Processing...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.processingString), Toast.LENGTH_SHORT).show();
             int id = Integer.parseInt(rawResult.getText());
             Order order = new Order(id);
 //            if (order.getId() == -1)
@@ -140,40 +126,16 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
 
         } catch (Exception e) {
-            Toast.makeText(this, "Некорректний QR код", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.incorrectQRString), Toast.LENGTH_SHORT).show();
             // If you would like to resume scanning, call this method below:
             mScannerView.resumeCameraPreview(this);
         }
-
-/*
-        final String result = rawResult.getText();
-        Log.d("QRCodeScanner", rawResult.getText());
-        Log.d("QRCodeScanner", rawResult.getBarcodeFormat().toString());
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mScannerView.resumeCameraPreview(QRScannerActivity.this);
-            }
-        });
-        builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
-                startActivity(browserIntent);
-            }
-        });
-        builder.setMessage(rawResult.getText());
-        AlertDialog alert1 = builder.create();
-        alert1.show();*/
     }
 
     @Override
     public void onTaskCompleted(Object o) {
         if (o == null) {
-            Toast.makeText(this, "Некорректний QR код", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.incorrectQRString), Toast.LENGTH_SHORT).show();
             // If you would like to resume scanning, call this method below:
             mScannerView.resumeCameraPreview(this);
         } else {

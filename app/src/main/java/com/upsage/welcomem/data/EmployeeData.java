@@ -4,11 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.upsage.welcomem.OnTaskCompleted;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.EmployeeTestTask;
-
-import java.sql.Timestamp;
-import java.util.concurrent.ExecutionException;
 
 public class EmployeeData implements OnTaskCompleted {
     private String login = "";

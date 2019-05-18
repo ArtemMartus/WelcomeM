@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.upsage.welcomem.OnTaskCompleted;
+import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.ProductRetrieveTask;
 
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 
 public class Product implements OnTaskCompleted {
