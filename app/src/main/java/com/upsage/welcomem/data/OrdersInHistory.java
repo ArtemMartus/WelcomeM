@@ -5,37 +5,47 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.entries.OrderInHistoryEntry;
+import com.upsage.welcomem.data.viewholders.OrderInHistoryViewHolder;
+import com.upsage.welcomem.interfaces.ItemTouchHelperAdapter;
+import com.upsage.welcomem.interfaces.OnItemClick;
+import com.upsage.welcomem.interfaces.OnStartDragListener;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.OrderHistoryRetrieveTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class OrdersInHistory extends ArrayAdapter<OrderInHistoryEntry> implements OnTaskCompleted {
+public class OrdersInHistory extends RecyclerView.Adapter<OrderInHistoryViewHolder> implements
+        OnTaskCompleted, ItemTouchHelperAdapter {
+    private final OnStartDragListener mDragStartListener;
     private Integer employeeId;
     private OnTaskCompleted receiver;
+    private OnItemClick onItemClick;
+    private List<OrderInHistoryEntry> entries = new ArrayList<>();
+    private Context context;
 
-    public OrdersInHistory(Integer employeeId, Context context) {
-        super(context, R.layout.order_item_in_history_list);
+
+    public OrdersInHistory(Integer employeeId, OnItemClick onItemClick, OnStartDragListener dragListener) {
         this.employeeId = employeeId;
+        this.onItemClick = onItemClick;
+        mDragStartListener = dragListener;
     }
 
     @Override
     public void onTaskCompleted(Object o) {
         if ((o instanceof List)) {
-            addAll((List<OrderInHistoryEntry>) o);
+            entries.addAll((List<OrderInHistoryEntry>) o);
             notifyDataSetChanged();
         } else {
-            Toast.makeText(getContext(), R.string.sqlErrorRetryString, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), R.string.sqlErrorRetryString, Toast.LENGTH_SHORT).show();
         }
 
         if (receiver != null)
@@ -48,35 +58,71 @@ public class OrdersInHistory extends ArrayAdapter<OrderInHistoryEntry> implement
         task.execute(employeeId);
     }
 
-    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        OrderInHistoryEntry entry = getItem(position);
-        if (entry != null && entry.ready()) {
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.order_item_in_history_list, parent, false);
-            }
-            TextView orderIdTV = convertView.findViewById(R.id.orderHistoryIdTextView);
-            TextView clientNameTV = convertView.findViewById(R.id.orderHistoryClientNameTextView);
-            TextView deliveryDateTV = convertView.findViewById(R.id.deliveryDateHistoryTextView);
-
-            String str = getContext().getString(R.string.orderIdString) + entry.getId();
-            orderIdTV.setText(str);
-            clientNameTV.setText(entry.getClientName());
-            deliveryDateTV.setText(new SimpleDateFormat("dd/MM/yyyy HH:ss").format(entry.getDeliveryDate()));
-
-            return convertView;
-        } else
-            return super.getView(position, convertView, parent);
-    }
 
     public boolean ready() {
-        for (int i = 0; i < getCount(); ++i) {
-            OrderInHistoryEntry item = getItem(i);
+        for (OrderInHistoryEntry item :
+                entries)
             if (item != null && !item.ready())
                 return false;
-        }
+
         return true;
+    }
+
+
+    @NonNull
+    @Override
+    public OrderInHistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (context == null)
+            context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View inflatedView = inflater.inflate(R.layout.order_item_in_history_list, parent, false);
+        OrderInHistoryViewHolder holder = new OrderInHistoryViewHolder(inflatedView);
+        if (onItemClick != null)
+            inflatedView.setOnClickListener(v -> onItemClick.OnItemClick(v, holder.getAdapterPosition()));
+        /*inflatedView.setOnTouchListener((v, event) -> {
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                mDragStartListener.onStartDrag(holder);
+            }
+            return false;
+        });*/
+
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull OrderInHistoryViewHolder holder, int position) {
+        OrderInHistoryEntry entry = entries.get(position);
+        String orderIdString = context.getString(R.string.orderIdString) + entry.getId();
+        @SuppressLint("SimpleDateFormat")
+        String deliveryDateString = new SimpleDateFormat("dd/MM/yyyy HH:ss").format(entry.getDeliveryDate());
+        holder.setData(orderIdString, entry.getClientName(), deliveryDateString);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return entries.size();
+    }
+
+    public OrderInHistoryEntry getItem(int position) {
+        try {
+            return entries.get(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(entries, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        entries.remove(position);
+        notifyItemRemoved(position);
     }
 }

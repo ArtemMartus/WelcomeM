@@ -15,7 +15,7 @@
         android:layout_marginEnd="4dp"
         android:text="123"
         app:layout_constraintEnd_toStartOf="@+id/orderHistoryClientNameTextView"
-        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,9 +26,10 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
+        android:minEms="4"
         android:text="Іваненко Іван Іванович"
         app:layout_constraintEnd_toStartOf="@+id/deliveryDateHistoryTextView"
-        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintHorizontal_weight="5"
         app:layout_constraintStart_toEndOf="@+id/orderHistoryIdTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +42,7 @@
         android:layout_marginEnd="16dp"
         android:text="17/05/2019 13:13"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintHorizontal_weight="7"
         app:layout_constraintStart_toEndOf="@+id/orderHistoryClientNameTextView"
         app:layout_constraintTop_toTopOf="parent" />
 

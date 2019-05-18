@@ -40,4 +40,5 @@
     <string name="paymentMadeString">Успішно сплачено</string>
     <string name="waitUntilItLoadsString">Зачекайте поки закінчиться завантаження данних</string>
     <string name="incorrectInputString">Неправильно введено данні</string>
+    <string name="monthOvertimeString">Понаднормової роботи за місяць:</string>
 </resources>
