@@ -36,7 +36,9 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
     TextView managerNameTextView;
     TextView managerTelephoneTextView;
     TextView clientBalanceTextView;
-    TextView sumTextView;
+    TextView recommendedPriceToPayTextView;
+    //todo add editText in which courier can pass amount of money given by customer
+    //  so his balance will be corrected according to (balance - (given money - recommended sum) )
     TextView orderPaidTextView;
     TextView orderAddressTextView;
     Button payOrderButton;
@@ -61,7 +63,7 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
         managerNameTextView = findViewById(R.id.managerNameTextView);
         managerTelephoneTextView = findViewById(R.id.managerTelephoneTextView);
         clientBalanceTextView = findViewById(R.id.clientBalanceTextView);
-        sumTextView = findViewById(R.id.sumTextView);
+        recommendedPriceToPayTextView = findViewById(R.id.sumTextView);
         orderPaidTextView = findViewById(R.id.orderPaidTextView);
         orderAddressTextView = findViewById(R.id.orderAddressTextView);
         payOrderButton = findViewById(R.id.payOrderButton);
@@ -79,6 +81,8 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
             PaymentTask task = new PaymentTask(this);
             Toast.makeText(this, R.string.payInProcessString, Toast.LENGTH_SHORT).show();
             Double newBalance = client.getBalance() - sum;
+
+            // todo make it also record the end of a day for courier if no more orders left
 
             task.execute(order.getId().doubleValue()
                     , order.getClientId().doubleValue()
@@ -204,11 +208,11 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
 
 
             DecimalFormat df = new DecimalFormat("#.00");
-            sumTextView.setText(getString(R.string.sumString) + df.format(sum) + order.getCurrency());
+            recommendedPriceToPayTextView.setText(getString(R.string.sumString) + df.format(sum) + order.getCurrency());
 
         } else {
             productsTextView.setText(R.string.loadingString);
-            sumTextView.setText(R.string.loadingString);
+            recommendedPriceToPayTextView.setText(R.string.loadingString);
         }
         orderAddressTextView.setText(getString(R.string.addressString) + order.getDeliveryAddress());
     }

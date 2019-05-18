@@ -60,11 +60,11 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompleted 
         employeeData.setRemember(rememberCheckBox.isChecked());
 
         if (employeeData.isNotEmpty()) {
-            Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.loadingString, Toast.LENGTH_SHORT).show();
             signInButton.setEnabled(false);
             employeeData.test(this);
         } else
-            Toast.makeText(this, "Неправильно введено данні", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.incorrectInputString, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompleted 
             goMain();
         }
         else {
-            Toast.makeText(LoginActivity.this, "Неправильно введено данні", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, R.string.incorrectInputString, Toast.LENGTH_SHORT).show();
             signInButton.setEnabled(true);
         }
     }

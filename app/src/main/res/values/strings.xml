@@ -11,8 +11,8 @@
     <string name="passwordString">Пароль</string>
     <string name="rememberString">Запам\'ятати</string>
     <string name="signInString">Увійти</string>
-    <string name="sumString">Сумма: </string>
-    <string name="addressString">Адресса: </string>
+    <string name="sumString">Сума: </string>
+    <string name="addressString">Адреса: </string>
     <string name="deliveredString">Доставлено: </string>
     <string name="clientNameString">Замовник: </string>
     <string name="clientTelephoneString">Моб. номер клієнта: </string>
@@ -34,9 +34,10 @@
     <string name="ordersHistoryString">Історія замовлень</string>
     <string name="orderIdString">№</string>
     <string name="sqlErrorRetryString">Виникла помилка при завантаженні</string>
-    <string name="overallTimeString">Всього часу:</string>
+    <string name="overallOvertimeForGivenDayString">Всього перероблено на:</string>
     <string name="pathwaysString">Замовлення, що очікують доставки</string>
     <string name="payInProcessString">Оплата у процессі…</string>
     <string name="paymentMadeString">Успішно сплачено</string>
     <string name="waitUntilItLoadsString">Зачекайте поки закінчиться завантаження данних</string>
+    <string name="incorrectInputString">Неправильно введено данні</string>
 </resources>

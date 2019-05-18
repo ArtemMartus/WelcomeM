@@ -21,6 +21,9 @@ public class WorkHoursActivity extends AppCompatActivity implements OnTaskComple
     ListView listView;
     TextView titleTextView;
 
+    //todo add overall month overtime textview
+    //todo remake workHours system to one that counts overtime $(last_order_delivered) - 18:00
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtil.onCreateSetTheme(this);
@@ -42,7 +45,7 @@ public class WorkHoursActivity extends AppCompatActivity implements OnTaskComple
                 int minutes = item.workMinutes();
                 int hours = minutes / 60;
                 minutes -= hours * 60;
-                Toast.makeText(this, getString(R.string.overallTimeString) +
+                Toast.makeText(this, getString(R.string.overallOvertimeForGivenDayString) +
                         hours + ":" + minutes, Toast.LENGTH_SHORT).show();
             }
         });
