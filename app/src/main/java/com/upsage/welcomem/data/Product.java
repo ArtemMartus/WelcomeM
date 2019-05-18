@@ -49,14 +49,14 @@ public class Product implements OnTaskCompleted {
         price = (double) orderPreferences.getFloat("price", -1.0f);
         discount = (double) orderPreferences.getFloat("discount", -1.0f);
 
-        Log.d("Product load()", "Downloading product data asynchronously");
+        /*Log.d("Product load()", "Downloading product data asynchronously");
 
         if (orderPreferences.getInt("id", -1) == -1)
             test((OnTaskCompleted) context);
         else
-            test(null);
+            test(null);*/
 
-        return true;
+        return ready();
     }
 
     public boolean ready() {
@@ -109,6 +109,7 @@ public class Product implements OnTaskCompleted {
 
     @Override
     public void onTaskCompleted(Object o) {
+        isReady = true;
         if ((o instanceof Product)) {
             Product product = (Product) o;
             copy(product);
@@ -121,7 +122,6 @@ public class Product implements OnTaskCompleted {
 
             } else
                 receiver.onTaskCompleted(null);
-        isReady = true;
     }
 
     public Double getFinalPrice() {

@@ -3,7 +3,7 @@ package com.upsage.welcomem.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.upsage.welcomem.data.WorkHoursEntry;
+import com.upsage.welcomem.data.entries.WorkHoursEntry;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
 
 import java.sql.Connection;

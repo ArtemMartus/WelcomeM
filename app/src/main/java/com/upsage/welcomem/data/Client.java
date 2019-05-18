@@ -14,7 +14,7 @@ public class Client implements DatabasePojo {
     private String surname = "";
     private String address = "";
     private String email = "";
-    private String tel_number = "";
+    private String telNumber = "";
     private Double balance = -1.0;
     private OnTaskCompleted receiver;
 
@@ -23,13 +23,13 @@ public class Client implements DatabasePojo {
         this.id = id;
     }
 
-    public Client(Integer id, String name, String surname, String address, String email, String tel_number, Double balance) {
+    public Client(Integer id, String name, String surname, String address, String email, String telNumber, Double balance) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.address = address;
         this.email = email;
-        this.tel_number = tel_number;
+        this.telNumber = telNumber;
         this.balance = balance;
     }
 
@@ -64,18 +64,18 @@ public class Client implements DatabasePojo {
         name = orderPreferences.getString("name", "");
         surname = orderPreferences.getString("surname", "");
         address = orderPreferences.getString("address", "");
-        tel_number = orderPreferences.getString("tel_number", "");
+        telNumber = orderPreferences.getString("telNumber", "");
         email = orderPreferences.getString("email", "");
         balance = (double) orderPreferences.getFloat("balance", -1.0f);
 
         Log.d("Client load()", "Downloading client data asynchronously");
 
-        if (orderPreferences.getInt("id", -1) == -1)
+        /*if (orderPreferences.getInt("id", -1) == -1)
             test((OnTaskCompleted) context);
         else
-            test(null);
+            test(null);*/
 
-        return true;
+        return ready();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Client implements DatabasePojo {
                 .putString("name", name)
                 .putString("surname", surname)
                 .putString("address", address)
-                .putString("tel_number", tel_number)
+                .putString("telNumber", telNumber)
                 .putString("email", email)
                 .putFloat("balance", balance.floatValue())
                 .apply();
@@ -110,9 +110,13 @@ public class Client implements DatabasePojo {
         name = o.name;
         surname = o.surname;
         address = o.address;
-        tel_number = o.tel_number;
+        telNumber = o.telNumber;
         email = o.email;
         balance = o.balance;
+    }
+
+    public boolean ready() {
+        return !name.isEmpty() && !telNumber.isEmpty();
     }
 
     @Override
@@ -168,11 +172,11 @@ public class Client implements DatabasePojo {
     }
 
     public String getTelNumber() {
-        return tel_number;
+        return telNumber;
     }
 
-    public void setTel_number(String tel_number) {
-        this.tel_number = tel_number;
+    public void setTelNumber(String telNumber) {
+        this.telNumber = telNumber;
     }
 
     public Double getBalance() {
@@ -182,4 +186,5 @@ public class Client implements DatabasePojo {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
 }

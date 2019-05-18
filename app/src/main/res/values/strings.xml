@@ -31,4 +31,8 @@
     <string name="cancelString">Відмовити</string>
     <string name="processingString">Обробляю…</string>
     <string name="incorrectQRString">Некорректний QR код!</string>
+    <string name="ordersHistoryString">Історія замовлень</string>
+    <string name="orderIdString">№</string>
+    <string name="sqlErrorRetryString">Виникла помилка при завантаженні</string>
+    <string name="overallTimeString">Всього часу:</string>
 </resources>

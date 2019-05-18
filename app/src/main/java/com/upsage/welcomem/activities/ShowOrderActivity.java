@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,7 @@ import com.upsage.welcomem.utils.ThemeStyle;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
     TextView orderPaidTextView;
     TextView orderAddressTextView;
     Button payOrderButton;
+    LinearLayout orderLayout;
 
     Order order;
     Client client;
@@ -63,6 +65,7 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
         orderPaidTextView = findViewById(R.id.orderPaidTextView);
         orderAddressTextView = findViewById(R.id.orderAddressTextView);
         payOrderButton = findViewById(R.id.payOrderButton);
+        orderLayout = findViewById(R.id.orderShowLinearLayout);
 
         payOrderButton.setOnClickListener(v -> {
             Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
@@ -98,7 +101,7 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
 
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
     @Override
     public void onTaskCompleted(Object o) {
 
@@ -110,62 +113,92 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
 
         if (client == null) {
             client = new Client(order.getClientId());
-            client.load(ShowOrderActivity.this);
+            if (!client.load(ShowOrderActivity.this))
+                client.test(this);
         }
 
         if (manager == null) {
             manager = new EmployeeData(order.getManagerId());
-            manager.load(ShowOrderActivity.this);
+            if (!manager.load(ShowOrderActivity.this))
+                manager.test(this);
         }
+
+        boolean show_products = true;
+        boolean show_manager = true;
+        boolean show_client = true;
 
         if (products == null) {
             products = new LinkedList<>();
             for (String part : order.getProductsId().split(" ")) {
                 try {
                     Product product = new Product(Integer.parseInt(part));
-                    product.load(ShowOrderActivity.this);
+                    if (!product.load(ShowOrderActivity.this))
+                        product.test(this);
                     products.add(product);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("Show Order Activity", "Some error in products string THIS_PART ain't integer-[" + part + "]");
                 }
             }
-        } else {
-            for (Product p : products) {
-                if (!p.ready())
-                    return; // We must wait until all products are loaded from database or cache
+        }
+
+        for (Product p : products) {
+            if (!p.ready()) {
+                show_products = false; // We must wait until all products are loaded from database or cache
+                break;
             }
         }
+        if (!manager.ready())
+            show_manager = false;
+        if (!client.ready())
+            show_client = false;
 
 
-        if (order.getDeliveryDate() != null) {
-            payOrderButton.setEnabled(false);
-            payOrderButton.setVisibility(View.INVISIBLE);
+        if (order.getDeliveryDate() != null && payOrderButton != null && orderLayout != null) {
+            orderLayout.removeView(payOrderButton);
             orderPaidTextView.setVisibility(View.VISIBLE);
-            Date date = new Date(order.getDeliveryDate().getTime());
-            orderPaidTextView.setText(getString(R.string.deliveredString) + date.toString());
+            orderPaidTextView.setText(getString(R.string.deliveredString) +
+                    new SimpleDateFormat("dd/MM/yyyy HH:ss").format(order.getDeliveryDate()));
+        } else if (orderPaidTextView != null && orderLayout != null)
+            orderLayout.removeView(orderPaidTextView);
+
+        if (show_client) {
+            clientNameTextView.setText(getString(R.string.clientNameString) + client.toString());
+            clientTelephoneTextView.setText(getString(R.string.clientTelephoneString) + client.getTelNumber());
+            clientBalanceTextView.setText(getString(R.string.clientBalanceString) + client.getBalance());
+        } else {
+            clientNameTextView.setText(R.string.loadingString);
+            clientTelephoneTextView.setText(R.string.loadingString);
+            clientBalanceTextView.setText(R.string.loadingString);
         }
-        clientNameTextView.setText(getString(R.string.clientNameString) + client.toString());
-        clientTelephoneTextView.setText(getString(R.string.clientTelephoneString) + client.getTelNumber());
-        clientBalanceTextView.setText(getString(R.string.clientBalanceString) + client.getBalance());
 
-        managerNameTextView.setText(getString(R.string.managerNameString) +
-                manager.getName() + " " + manager.getSurname());
-        managerTelephoneTextView.setText(getString(R.string.managerTelephoneString) +
-                manager.getTelNumber());
-
-        String productsInfo = "";
-        Double sum = 0.0;
-        for (Product p : products) {
-            productsInfo += p.asString() + "\n";
-            sum += p.getFinalPrice();
+        if (show_manager) {
+            managerNameTextView.setText(getString(R.string.managerNameString) +
+                    manager.getName() + " " + manager.getSurname());
+            managerTelephoneTextView.setText(getString(R.string.managerTelephoneString) +
+                    manager.getTelNumber());
+        } else {
+            managerNameTextView.setText(R.string.loadingString);
+            managerTelephoneTextView.setText(R.string.loadingString);
         }
-        productsTextView.setText(productsInfo);
 
-        {
-            DecimalFormat df = new DecimalFormat("#.00");
-            sumTextView.setText(getString(R.string.sumString) + df.format(sum) + order.getCurrency());
-            //sumTextView.setText(getString(R.string.sumString) + order.getSum().toString() + order.getCurrency());
+        if (show_products) {
+            String productsInfo = "";
+            Double sum = 0.0;
+            for (Product p : products) {
+                productsInfo += p.asString() + "\n";
+                sum += p.getFinalPrice();
+            }
+            productsTextView.setText(productsInfo);
+
+            {
+                DecimalFormat df = new DecimalFormat("#.00");
+                sumTextView.setText(getString(R.string.sumString) + df.format(sum) + order.getCurrency());
+                //sumTextView.setText(getString(R.string.sumString) + order.getSum().toString() + order.getCurrency());
+            }
+        } else {
+            productsTextView.setText(R.string.loadingString);
+            sumTextView.setText(R.string.loadingString);
         }
         orderAddressTextView.setText(getString(R.string.addressString) + order.getDeliveryAddress());
 

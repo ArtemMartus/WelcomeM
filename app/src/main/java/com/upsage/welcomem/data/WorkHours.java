@@ -2,7 +2,6 @@ package com.upsage.welcomem.data;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.upsage.welcomem.R;
+import com.upsage.welcomem.data.entries.WorkHoursEntry;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.WorkHoursRetrieveTask;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 public class WorkHours extends ArrayAdapter<WorkHoursEntry> implements OnTaskCompleted {
@@ -59,7 +58,7 @@ public class WorkHours extends ArrayAdapter<WorkHoursEntry> implements OnTaskCom
             TextView workDayTV = convertView.findViewById(R.id.workDayTextView);
             TextView startHourTV = convertView.findViewById(R.id.startHourTextView);
             TextView endHourTV = convertView.findViewById(R.id.endHourTextView);
-            TextView overtimeTV = convertView.findViewById(R.id.overtimeTtextView);
+            TextView overtimeTV = convertView.findViewById(R.id.overtimeTextView);
 
             if (entry.getStartTime() != null) {
                 workDayTV.setText(getContext().getString(R.string.dayString) +
@@ -78,34 +77,19 @@ public class WorkHours extends ArrayAdapter<WorkHoursEntry> implements OnTaskCom
             }
             if (entry.getEndTime() != null && entry.getStartTime() != null) {
 
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(entry.getStartTime());
-                int start_hour = calendar.get(Calendar.HOUR_OF_DAY);
-                int start_minute = calendar.get(Calendar.MINUTE);
-                calendar.setTime(entry.getEndTime());
-                int end_hour = calendar.get(Calendar.HOUR_OF_DAY);
-                int end_minute = calendar.get(Calendar.MINUTE);
+                int minutes = entry.overtimeMinutes();
 
-                int hours = end_hour - start_hour;
-                int minutes = end_minute - start_minute;
-                if (minutes < 0 && hours > 0) {
-                    minutes = 60 - minutes;
-                    --hours;
-                }
-
-                String str = hours + ":" + minutes;
-                Log.d("Work hours log", "Difference between " + str);
-                if (hours > 9 || (hours == 9 && minutes > 0)) {
-                    str = (hours - 9) + ":" + minutes;
+                if (minutes > 0) {
+                    int hours = minutes / 60;
+                    minutes -= hours * 60;
                     overtimeTV.setText(getContext().getString(R.string.overtimeString) +
-                            str);
+                            hours + ":" + minutes);
                 } else {
-                    hours = hours - 9;
-                    if (hours < 0)
-                        hours = -hours;
-                    str = hours + ":" + minutes;
+                    minutes = -minutes;
+                    int hours = minutes / 60;
+                    minutes -= hours * 60;
                     overtimeTV.setText(getContext().getString(R.string.shorttimeString) +
-                            str);
+                            hours + ":" + minutes);
                 }
             }
 
@@ -113,6 +97,7 @@ public class WorkHours extends ArrayAdapter<WorkHoursEntry> implements OnTaskCom
         } else
             return super.getView(position, convertView, parent);
     }
+
 
     public boolean ready() {
         for (int i = 0; i < getCount(); ++i) {

@@ -49,9 +49,19 @@ public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData
                 ResultSet resultSet = statement.executeQuery();
 
                 if (resultSet.first()) {
+                    String login;
+                    String password;
+                    if (credential.isNotEmpty()) {
+                        login = resultSet.getString("login");
+                        password = resultSet.getString("password");
+                    } else {
+                        login = "";
+                        password = "";
+                    }
+
                     employee = new EmployeeData(
-                            resultSet.getString("login"),
-                            resultSet.getString("password"),
+                            login,
+                            password,
                             credential.getRemember(),
                             resultSet.getString("name"),
                             resultSet.getString("surname"),
