@@ -49,20 +49,5 @@ public class WorkHoursEntry {
     public boolean ready() {
         return id != null && id > 0 && finishTime != null && finishTime.getTime() > 0;
     }
-
-//    public int overtimeMinutes() {
-//        return workMinutes() - 9 * 60;
-//    }
-
-//    public int workMinutes() {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(getStartTime());
-//        int start_minute = calendar.get(Calendar.MINUTE) + calendar.get(Calendar.HOUR_OF_DAY) * 60;
-//        calendar.setTime(getEndTime());
-//        int end_minute = calendar.get(Calendar.MINUTE) + calendar.get(Calendar.HOUR_OF_DAY) * 60;
-//
-//
-//        return end_minute - start_minute;
-//    }
 }
 

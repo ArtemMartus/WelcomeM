@@ -44,16 +44,6 @@ public class WorkHoursActivity extends AppCompatActivity implements OnTaskComple
         workHours.test(this);
 
         titleTextView.setText(R.string.loadingString);
-//        listView.setOnItemClickListener((parent, view, position, id) -> {
-//            WorkHoursEntry item = workHours.getItem(position);
-//            if (item != null) {
-//                int minutes = item.workMinutes();
-//                int hours = minutes / 60;
-//                minutes -= hours * 60;
-//                Toast.makeText(this, getString(R.string.overallOvertimeForGivenDayString) +
-//                        hours + ":" + minutes, Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         overtimeHistory = new OvertimeHistory(employee.getId());
         overtimeHistory.test(this);
