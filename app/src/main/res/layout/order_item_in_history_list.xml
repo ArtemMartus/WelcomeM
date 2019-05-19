@@ -4,12 +4,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/textViewPadding">
 
     <TextView
         android:id="@+id/orderHistoryIdTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/textViewPadding"
         android:text="123"
         android:textAlignment="center" />
 
@@ -30,6 +31,7 @@
             android:layout_alignParentStart="true"
             android:minEms="4"
 
+            android:padding="@dimen/textViewPadding"
             android:text="Іван"
             android:textAlignment="textStart" />
 
@@ -39,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@id/orderHistoryClientNameTextView"
+            android:padding="@dimen/textViewPadding"
             android:text="17/05/2019 13:13"
             android:textAlignment="textEnd" />
     </RelativeLayout>

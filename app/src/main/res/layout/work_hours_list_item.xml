@@ -4,12 +4,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/textViewPadding">
 
     <TextView
         android:id="@+id/workDayTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/textViewPadding"
         android:text="2019/5/5" />
 
     <LinearLayout
@@ -22,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:padding="@dimen/textViewPadding"
             android:text="Кінець 18:03"
             android:textAlignment="viewStart" />
 
@@ -29,6 +31,7 @@
             android:id="@+id/overtimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/textViewPadding"
             android:layout_weight="2"
             android:text="+0:03"
             android:textAlignment="viewEnd" />

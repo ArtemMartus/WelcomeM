@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border"
     android:orientation="horizontal"
-    android:padding="18dp">
+    android:padding="@dimen/textViewPadding">
 
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="4dp"
+        android:padding="@dimen/textViewPadding"
         android:text="1243"
         android:textAlignment="viewStart" />
 
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:padding="4dp"
+        android:padding="@dimen/textViewPadding"
         android:text="Святошинская 134"
         android:textAlignment="viewEnd" />
 

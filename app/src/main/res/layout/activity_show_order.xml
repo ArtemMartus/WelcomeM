@@ -24,62 +24,63 @@
             android:id="@+id/orderShowLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/textViewPadding">
 
             <TextView
                 android:id="@+id/clientNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="Ігор" />
 
             <TextView
                 android:id="@+id/clientTelephoneTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="+38065243523" />
 
             <TextView
                 android:id="@+id/orderAddressTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="Хрещатик 2" />
 
             <TextView
                 android:id="@+id/productsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="Телевізор" />
 
             <TextView
                 android:id="@+id/managerNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="Менеджер Василь" />
 
             <TextView
                 android:id="@+id/managerTelephoneTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="+3805436342123" />
 
             <TextView
                 android:id="@+id/clientBalanceTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="Баланс клієнта: 1200+грн" />
 
             <TextView
                 android:id="@+id/sumTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8sp"
+                android:padding="@dimen/textViewPadding"
                 android:text="До сплати: 250грн" />
 
             <EditText
@@ -88,7 +89,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/sumOfMoneyTakenFromClientString"
                 android:inputType="numberDecimal"
-                android:minEms="5" />
+                android:minEms="5"
+                android:padding="@dimen/textViewPadding" />
 
             <Button
                 android:id="@+id/payOrderButton"
@@ -97,8 +99,7 @@
                 android:layout_marginLeft="48dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="48dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:padding="@dimen/textViewPadding"
                 android:text="@string/payText"
                 android:textAllCaps="false" />
 
