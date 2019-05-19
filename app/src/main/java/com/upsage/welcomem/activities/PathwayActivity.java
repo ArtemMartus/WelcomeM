@@ -79,6 +79,8 @@ public class PathwayActivity extends AppCompatActivity implements OnTaskComplete
     @Override
     protected void onResume() {
         SQLSingleton.startConnection();
+        pathways.clear();
+        pathways.test(this);
         if (pathways.ready())
             titleTextView.setText(R.string.pathwaysString);
         else

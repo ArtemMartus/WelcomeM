@@ -1,6 +1,7 @@
 package com.upsage.welcomem.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ public class Pathways extends RecyclerView.Adapter<PathwayEntryViewHolder> imple
     private OnTaskCompleted receiver;
     private List<PathwayEntry> entries = new ArrayList<>();
     private Integer courierId;
+    private final SharedPreferences preferences;
+    private List<Integer> rightOrder = new ArrayList<>();
 
     public Pathways(Integer courierId, OnItemClick onItemClick, OnStartDragListener dragListener,
                     Context context) {
@@ -38,12 +41,79 @@ public class Pathways extends RecyclerView.Adapter<PathwayEntryViewHolder> imple
         this.context = context;
         this.onItemClick = onItemClick;
         mDragStartListener = dragListener;
+        preferences = context.getSharedPreferences("path_order", 0);
+    }
+
+    // we order entries by their IDs
+    void parseOrderString(String str) {
+        for (String part : str.split(" ")) {
+            try {
+                Integer integer = Integer.parseInt(part);
+                addToOrder(integer);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+    }
+
+    void initOrder() {
+        rightOrder.clear();
+        for (PathwayEntry entry : entries)
+            addToOrder(entry.getId());
+    }
+
+    void makeOrder() {
+        List<PathwayEntry> ordered = new ArrayList<>();
+        for (Integer id : rightOrder) {
+            for (PathwayEntry entry : entries) {
+                if (entry.getId().equals(id)) {
+                    ordered.add(entry);
+                    break;
+                }
+            }
+        }
+
+        if (entries.size() > ordered.size()) {
+            for (PathwayEntry entry : entries) {
+                if (rightOrder.contains(entry.getId())
+                        || ordered.contains(entry))
+                    continue;
+                ordered.add(entry);
+            }
+        }
+
+        entries = ordered;
+    }
+
+
+    void saveOrder() {
+        String str = "";
+        for (Integer integer : rightOrder) {
+            str += integer + " ";
+        }
+        preferences.edit().putString("order", str).apply();
+    }
+
+    private void addToOrder(Integer i) {
+        if (!rightOrder.contains(i))
+            rightOrder.add(i);
     }
 
     @Override
     public void onTaskCompleted(Object o) {
         if ((o instanceof List)) {
             entries.addAll((List<PathwayEntry>) o);
+
+            String str = preferences.getString("order", "");
+            if (str != null && !str.isEmpty()) {
+                parseOrderString(str);
+            } else {
+                initOrder();
+                saveOrder();
+            }
+            makeOrder();
+
             notifyDataSetChanged();
         }
 
@@ -53,6 +123,11 @@ public class Pathways extends RecyclerView.Adapter<PathwayEntryViewHolder> imple
         if (entries.size() == 0 && context != null) {
             Toast.makeText(context, R.string.seemsYouveDoneYourWorkForTodayString, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void clear() {
+        entries.clear();
+        notifyDataSetChanged();
     }
 
     public void test(OnTaskCompleted receiver) {
@@ -107,6 +182,8 @@ public class Pathways extends RecyclerView.Adapter<PathwayEntryViewHolder> imple
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(entries, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+        initOrder();
+        saveOrder();
         return true;
     }
 

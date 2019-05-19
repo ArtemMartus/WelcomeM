@@ -1,5 +1,7 @@
 package com.upsage.welcomem.data.entries;
 
+import java.util.Objects;
+
 public class PathwayEntry {
     private Integer id = -1;
     private String address;
@@ -27,5 +29,19 @@ public class PathwayEntry {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PathwayEntry entry = (PathwayEntry) o;
+        return id.equals(entry.id) &&
+                address.equals(entry.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, address);
     }
 }
