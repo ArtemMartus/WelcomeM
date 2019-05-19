@@ -1,8 +1,10 @@
 package com.upsage.welcomem.data.entries;
 
+import com.upsage.welcomem.interfaces.HasId;
+
 import java.sql.Timestamp;
 
-public class OrderInHistoryEntry {
+public class OrderInHistoryEntry implements HasId {
     private Integer id = -1;
     private Integer clientId = -1;
     private Timestamp deliveryDate;

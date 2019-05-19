@@ -1,8 +1,10 @@
 package com.upsage.welcomem.data.entries;
 
+import com.upsage.welcomem.interfaces.HasId;
+
 import java.util.Objects;
 
-public class PathwayEntry {
+public class PathwayEntry implements HasId {
     private Integer id = -1;
     private String address;
 

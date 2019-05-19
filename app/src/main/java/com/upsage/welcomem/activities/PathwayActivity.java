@@ -45,7 +45,7 @@ public class PathwayActivity extends AppCompatActivity implements OnTaskComplete
 
         SharedPreferences userPreferences = getSharedPreferences("user", 0);
         EmployeeData employee = new EmployeeData(userPreferences);
-        pathways = new Pathways(employee.getId(), this, this, this);
+        pathways = new Pathways(employee.getId(), this, this);
         pathways.test(this);
 
         ItemTouchHelper.Callback callback = new SimpleItemDragAndDrop(pathways);

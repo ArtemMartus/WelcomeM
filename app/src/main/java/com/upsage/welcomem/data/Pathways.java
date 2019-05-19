@@ -15,9 +15,9 @@ import com.upsage.welcomem.data.entries.PathwayEntry;
 import com.upsage.welcomem.data.viewholders.PathwayEntryViewHolder;
 import com.upsage.welcomem.interfaces.ItemDragHelperAdapter;
 import com.upsage.welcomem.interfaces.OnItemClick;
-import com.upsage.welcomem.interfaces.OnStartDragListener;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.PathwaysRetrieveTask;
+import com.upsage.welcomem.utils.OrderManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,93 +26,30 @@ import java.util.List;
 public class Pathways extends RecyclerView.Adapter<PathwayEntryViewHolder> implements
         OnTaskCompleted, ItemDragHelperAdapter {
 
-    private final OnStartDragListener mDragStartListener;
     private final OnItemClick onItemClick;
     private final Context context;
     private OnTaskCompleted receiver;
     private List<PathwayEntry> entries = new ArrayList<>();
     private Integer courierId;
-    private final SharedPreferences preferences;
-    private List<Integer> rightOrder = new ArrayList<>();
+    private final static String NAME = "order";
+    private OrderManager orderManager;
 
-    public Pathways(Integer courierId, OnItemClick onItemClick, OnStartDragListener dragListener,
+    public Pathways(Integer courierId, OnItemClick onItemClick,
                     Context context) {
         this.courierId = courierId;
         this.context = context;
         this.onItemClick = onItemClick;
-        mDragStartListener = dragListener;
-        preferences = context.getSharedPreferences("path_order", 0);
+        SharedPreferences preferences = context.getSharedPreferences("path_order", 0);
+        orderManager = new OrderManager(preferences);
     }
 
-    // we order entries by their IDs
-    void parseOrderString(String str) {
-        for (String part : str.split(" ")) {
-            try {
-                Integer integer = Integer.parseInt(part);
-                addToOrder(integer);
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
-            }
-        }
-    }
-
-    void initOrder() {
-        rightOrder.clear();
-        for (PathwayEntry entry : entries)
-            addToOrder(entry.getId());
-    }
-
-    void makeOrder() {
-        List<PathwayEntry> ordered = new ArrayList<>();
-        for (Integer id : rightOrder) {
-            for (PathwayEntry entry : entries) {
-                if (entry.getId().equals(id)) {
-                    ordered.add(entry);
-                    break;
-                }
-            }
-        }
-
-        if (entries.size() > ordered.size()) {
-            for (PathwayEntry entry : entries) {
-                if (rightOrder.contains(entry.getId())
-                        || ordered.contains(entry))
-                    continue;
-                ordered.add(entry);
-            }
-        }
-
-        entries = ordered;
-    }
-
-
-    void saveOrder() {
-        String str = "";
-        for (Integer integer : rightOrder) {
-            str += integer + " ";
-        }
-        preferences.edit().putString("order", str).apply();
-    }
-
-    private void addToOrder(Integer i) {
-        if (!rightOrder.contains(i))
-            rightOrder.add(i);
-    }
 
     @Override
     public void onTaskCompleted(Object o) {
         if ((o instanceof List)) {
             entries.addAll((List<PathwayEntry>) o);
 
-            String str = preferences.getString("order", "");
-            if (str != null && !str.isEmpty()) {
-                parseOrderString(str);
-            } else {
-                initOrder();
-                saveOrder();
-            }
-            makeOrder();
+            orderManager.checkPreferences(NAME, entries);
 
             notifyDataSetChanged();
         }
@@ -182,8 +119,8 @@ public class Pathways extends RecyclerView.Adapter<PathwayEntryViewHolder> imple
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(entries, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        initOrder();
-        saveOrder();
+        orderManager.initOrder(entries);
+        orderManager.saveOrder(NAME);
         return true;
     }
 

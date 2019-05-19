@@ -29,8 +29,6 @@ public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCom
     private TextView titleTextView;
     private ItemTouchHelper itemTouchHelper;
 
-    //todo add ability to permanently remove item from this history on local machine
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtil.onCreateSetTheme(this);
