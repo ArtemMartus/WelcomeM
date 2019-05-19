@@ -10,6 +10,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.upsage.welcomem.LoginActivity;
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.EmployeeData;
 import com.upsage.welcomem.utils.SQLSingleton;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         employee = new EmployeeData(userPreferences);
     }
 
+    // Создаем меню
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -41,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Проверяем подключение к БД
     @Override
     protected void onResume() {
         SQLSingleton.startConnection();
         super.onResume();
     }
 
+    //Методы обратотчики нажатий на кнопки
     public void scanQRCode(View view){
         startActivity(new Intent(this, QRScannerActivity.class));
     }
@@ -70,10 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goLogout(View view){
         userPreferences.edit().clear().apply();
-        startActivity(new Intent(this,LoginActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
+    // Обработка нажатия кнопки в меню
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

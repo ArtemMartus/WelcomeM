@@ -25,7 +25,7 @@
         <activity android:name=".activities.OrderHistoryActivity" />
         <activity android:name=".activities.PathwayActivity" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

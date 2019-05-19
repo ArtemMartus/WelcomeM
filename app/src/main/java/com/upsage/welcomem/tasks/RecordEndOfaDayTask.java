@@ -44,7 +44,7 @@ public class RecordEndOfaDayTask extends AsyncTask<Integer, Void, Integer> {
                 calendar.setTime(timestamp);
                 int currentMinutes = calendar.get(Calendar.MINUTE);
                 int currentHours = calendar.get(Calendar.HOUR);
-                currentHours -= 18;
+                currentHours -= 18; // 18 часов это конец рабочего дня, отняв от времени когда работник закончил 18 - получим время переработки
 
                 if (currentHours > 0 || (currentHours == 0 && currentMinutes > 0)) {
 

@@ -24,6 +24,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
 
+//QR сканирование при помощи библиотеки ZXing
 public class QRScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, OnTaskCompleted {
     private ZXingScannerView mScannerView;
     private static final String TAG = "Chinese QR scanner";
@@ -37,6 +38,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
 
+        // Получаем права на использование камеры
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             if (!checkPermission())
                 requestPermission();
@@ -116,14 +118,12 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
         Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
         try {
+            //Что-то просканировалось, нужно проверить является ли это кодом заказа
             mScannerView.stopCamera();
             Toast.makeText(this, getString(R.string.processingString), Toast.LENGTH_SHORT).show();
             int id = Integer.parseInt(rawResult.getText());
             Order order = new Order(id);
-//            if (order.getId() == -1)
             order.test(this);
-//            else
-//                onTaskCompleted(order);
 
 
         } catch (Exception e) {

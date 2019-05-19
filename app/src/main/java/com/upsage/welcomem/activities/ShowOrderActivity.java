@@ -108,6 +108,7 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
                     , newBalance);
         });
 
+        // Обработка нажания на адрес
         orderAddressTextView.setOnClickListener(v -> {
             Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(order.getDeliveryAddress()));
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -116,6 +117,7 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
                 startActivity(mapIntent);
             }
         });
+        // Установим читабельный, выделяющийся цвет тексту в зависимости от темы
         if (ThemeUtil.getStyle() == ThemeStyle.BlackNormal
                 || ThemeUtil.getStyle() == ThemeStyle.BlackSmall
                 || ThemeUtil.getStyle() == ThemeStyle.BlackLarge) {
@@ -143,6 +145,8 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
     @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
     @Override
     public void onTaskCompleted(Object o) {
+        // После загрузки данных о заказе - нужно загрузить данные пользователя, менеджера и продуктов
+
         boolean show_products = true;
         boolean show_manager = true;
         boolean show_client = true;
@@ -230,6 +234,7 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
             show_client = false;
 
 
+        // Если заказ уже оплачен - удалим кнопку оплатить и поле ввода с экрана
         if (order.getDeliveryDate() != null && payOrderButton != null && orderLayout != null) {
             orderLayout.removeView(payOrderButton);
             orderLayout.removeView(moneyGivenByClientEditText);
