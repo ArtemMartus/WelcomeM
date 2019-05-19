@@ -41,4 +41,11 @@
     <string name="waitUntilItLoadsString">Зачекайте поки закінчиться завантаження данних</string>
     <string name="incorrectInputString">Неправильно введено данні</string>
     <string name="monthOvertimeString">Понаднормової роботи за місяць:</string>
+    <string name="sumOfMoneyTakenFromClientString">Сума отримана від клієнта</string>
+    <string name="payText">Оплатити</string>
+    <string name="enterMoneyFromClient">Введіть суму, отриману від клієнта</string>
+    <string name="seemsYouveDoneYourWorkForTodayString">Схоже, ви виконали всі замовлення на сьогодні!</string>
+    <string name="lastOrderMandeYouAreFree">Ваше останнє замовлення виконано, ви вільні</string>
+    <string name="errorHappenedString">Трапилась помилка, спробуйте ще</string>
+    <string name="workToDoString">Потрібно виконати ще замовлень:</string>
 </resources>

@@ -16,6 +16,12 @@ public class SQLSingleton {
     private static Connection connection;
 
 
+    public final static int FinalRecordCode = 5;
+    public final static int SuccessfulPaymentCode = 3;
+    public final static int ErrorCode = -1;
+
+
+
     private SQLSingleton() {
         Log.d(TAG, "Initializing sql database stuff");
         try {

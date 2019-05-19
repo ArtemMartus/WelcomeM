@@ -1,8 +1,6 @@
 package com.upsage.welcomem.data;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.EmployeeTestTask;
@@ -51,32 +49,6 @@ public class EmployeeData implements OnTaskCompleted {
     public boolean isNotEmpty() {
         return !password.isEmpty()
                 && !login.isEmpty();
-    }
-
-    public boolean load(Context context) {
-        if (context == null) {
-            Log.e("EmployeeData load()", "Can't load it because context is empty");
-            return false;
-        }
-        if (id == -1) {
-            Log.e("EmployeeData load()", "Can't load order with invalid id");
-            return false;
-        }
-        SharedPreferences orderPreferences = context.getSharedPreferences("employee_" + id, 0);
-        //id = orderPreferences.getInt("id",-1);
-        name = orderPreferences.getString("name", "");
-        surname = orderPreferences.getString("surname", "");
-        telNumber = orderPreferences.getString("telNumber", "");
-        email = orderPreferences.getString("email", "");
-
-        Log.d("EmployeeData load()", "Downloading employee data asynchronously");
-
-        if (orderPreferences.getInt("id", -1) == -1)
-            test((OnTaskCompleted) context);
-        else
-            test(null);
-
-        return ready();
     }
 
     public boolean ready() {

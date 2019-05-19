@@ -82,6 +82,14 @@
                 android:padding="8sp"
                 android:text="До сплати: 250грн" />
 
+            <EditText
+                android:id="@+id/moneyGivenByClientEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/sumOfMoneyTakenFromClientString"
+                android:inputType="numberDecimal"
+                android:minEms="5" />
+
             <Button
                 android:id="@+id/payOrderButton"
                 android:layout_width="match_parent"
@@ -91,7 +99,7 @@
                 android:layout_marginRight="48dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:text="Оплатити"
+                android:text="@string/payText"
                 android:textAllCaps="false" />
 
             <TextView

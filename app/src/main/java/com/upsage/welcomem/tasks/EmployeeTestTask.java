@@ -29,7 +29,7 @@ public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData
                 Log.i(TAG, "connection successful");
 
                 PreparedStatement statement;
-                if(credential.isNotEmpty()) {
+                if (credential.isNotEmpty()) {
                     statement = SQLSingleton.prepareStatement
                             ("SELECT * from employees where login =? and password =?");
                     Log.i(TAG, "created statement for login and password");
@@ -77,8 +77,8 @@ public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData
 
     @Override
     protected void onPostExecute(EmployeeData employeeData) {
-        if(receiver!=null){
-            Log.i(TAG,"EmployeeData be like: "+employeeData);
+        if (receiver != null) {
+            Log.i(TAG, "EmployeeData be like: " + employeeData);
             receiver.onTaskCompleted(employeeData);
         }
         super.onPostExecute(employeeData);

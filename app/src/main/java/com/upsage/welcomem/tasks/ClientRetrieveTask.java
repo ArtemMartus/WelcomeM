@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ClientRetrieveTask extends AsyncTask<Client,Void,Client>  {
+public class ClientRetrieveTask extends AsyncTask<Client, Void, Client> {
     private final static String host = "jdbc:mysql://remotemysql.com:3306/XN5vmpIBV5";
     private final static String db_user = "XN5vmpIBV5";
     private final static String db_password = "3KW9meu7IL";
@@ -28,8 +28,6 @@ public class ClientRetrieveTask extends AsyncTask<Client,Void,Client>  {
         if (args.length > 0 && args[0] != null) {
             Client clientData = args[0];
             try {
-
-//                Connection connection = DriverManager.getConnection(host, db_user, db_password);
                 Log.i(TAG, "connection successful");
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT * from clients where id =?");
@@ -50,7 +48,6 @@ public class ClientRetrieveTask extends AsyncTask<Client,Void,Client>  {
                 }
                 resultSet.close();
                 statement.close();
-//                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -60,8 +57,8 @@ public class ClientRetrieveTask extends AsyncTask<Client,Void,Client>  {
 
     @Override
     protected void onPostExecute(Client clientData) {
-        if(receiver!=null){
-            Log.i(TAG,"Client we got be like: "+clientData);
+        if (receiver != null) {
+            Log.i(TAG, "Client we got be like: " + clientData);
             receiver.onTaskCompleted(clientData);
         }
         super.onPostExecute(clientData);

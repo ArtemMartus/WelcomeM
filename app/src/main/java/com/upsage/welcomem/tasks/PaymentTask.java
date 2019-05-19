@@ -49,9 +49,11 @@ public class PaymentTask extends AsyncTask<Double, Void, Integer> {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+                return SQLSingleton.ErrorCode;
             }
+            return SQLSingleton.SuccessfulPaymentCode;
         }
-        return 3;
+        return SQLSingleton.ErrorCode;
     }
 
     @Override

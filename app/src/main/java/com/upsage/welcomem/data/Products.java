@@ -31,9 +31,13 @@ public class Products implements OnTaskCompleted {
 
     @SuppressWarnings("unchecked")
     public void test(OnTaskCompleted receiver) {
-        this.receiver = receiver;
-        ProductsRetrieveTask task = new ProductsRetrieveTask(this);
-        task.execute(productIds);
+        if (productIds != null && productIds.size() > 0) {
+            this.receiver = receiver;
+            ProductsRetrieveTask task = new ProductsRetrieveTask(this);
+            task.execute(productIds);
+        } else {
+            Log.e(TAG, "productIds set has no items => no need in task");
+        }
     }
 
     public boolean ready() {

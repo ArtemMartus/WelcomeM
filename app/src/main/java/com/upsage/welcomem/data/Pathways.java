@@ -38,6 +38,10 @@ public class Pathways extends ArrayAdapter<PathwayEntry> implements OnTaskComple
 
         if (receiver != null)
             receiver.onTaskCompleted(null);
+
+        if (getCount() == 0) {
+            Toast.makeText(getContext(), R.string.seemsYouveDoneYourWorkForTodayString, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void test(OnTaskCompleted receiver) {

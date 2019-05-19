@@ -1,14 +1,9 @@
 package com.upsage.welcomem.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import com.upsage.welcomem.interfaces.DatabasePojo;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.ClientRetrieveTask;
 
-public class Client implements DatabasePojo {
+public class Client implements OnTaskCompleted {
     private Integer id = -1;
     private String name = "";
     private String surname = "";
@@ -42,67 +37,12 @@ public class Client implements DatabasePojo {
 
         if (receiver != null)
             if (id != -1) {
-                save();
                 receiver.onTaskCompleted(o);
 
             } else
                 receiver.onTaskCompleted(null);
     }
 
-    @Override
-    public boolean load(Context context) {
-        if (context == null) {
-            Log.e("Client load()", "Can't load it because context is empty");
-            return false;
-        }
-        if (id == -1) {
-            Log.e("Client load()", "Can't load order with invalid id");
-            return false;
-        }
-        /*SharedPreferences orderPreferences = context.getSharedPreferences("client_" + id, 0);
-        name = orderPreferences.getString("name", "");
-        surname = orderPreferences.getString("surname", "");
-        address = orderPreferences.getString("address", "");
-        telNumber = orderPreferences.getString("telNumber", "");
-        email = orderPreferences.getString("email", "");
-        balance = (double) orderPreferences.getFloat("balance", -1.0f);
-
-        Log.d("Client load()", "Downloading client data asynchronously");
-
-        if (orderPreferences.getInt("id", -1) == -1)
-            test((OnTaskCompleted) context);
-        else
-            test(null);
-*/
-        return ready();
-    }
-
-    @Override
-    public void save() {
-        if (receiver == null) {
-            Log.e("Client save()", "Can't save it because receiver is empty so no context");
-            return;
-        }
-        if (id == -1) {
-            Log.e("Client save()", "Can't save order with invalid id");
-            return;
-        }
-        Log.d("Client save()", "Saving order to client" + id);
-        Context context = (Context) receiver;
-        SharedPreferences orderPreferences = context.getSharedPreferences("client_" + id, 0);
-
-        orderPreferences.edit()
-                .putInt("id", id)
-                .putString("name", name)
-                .putString("surname", surname)
-                .putString("address", address)
-                .putString("telNumber", telNumber)
-                .putString("email", email)
-                .putFloat("balance", balance.floatValue())
-                .apply();
-    }
-
-    @Override
     public void copy(Object c) {
         Client o = (Client) c;
         id = o.id;
@@ -118,7 +58,6 @@ public class Client implements DatabasePojo {
         return !name.isEmpty() && !telNumber.isEmpty();
     }
 
-    @Override
     public void test(OnTaskCompleted receiver) {
         this.receiver = receiver;
         ClientRetrieveTask task = new ClientRetrieveTask(this);

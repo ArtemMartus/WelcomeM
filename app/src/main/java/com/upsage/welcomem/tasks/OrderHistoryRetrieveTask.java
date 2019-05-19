@@ -72,7 +72,7 @@ public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<Orde
                 statement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
-                orders = null;
+//                orders = null;
             }
         }
         return orders;

@@ -42,8 +42,8 @@ public class OrderRetrieveTask extends AsyncTask<Order,Void,Order> {
                             resultSet.getString("currency"),
                             resultSet.getString("delivery_address"),
                             resultSet.getTimestamp("delivery_date"),
-
-                            resultSet.getInt("manager_id")
+                            resultSet.getInt("manager_id"),
+                            resultSet.getInt("courier_id")
                     );
                 }
                 resultSet.close();
