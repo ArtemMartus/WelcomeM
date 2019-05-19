@@ -92,8 +92,6 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
                 }
                 mScannerView.setResultHandler(this);
                 mScannerView.startCamera();
-            } else {
-                requestPermission();
             }
         }
 
