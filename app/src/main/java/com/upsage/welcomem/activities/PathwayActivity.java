@@ -42,6 +42,8 @@ public class PathwayActivity extends AppCompatActivity implements OnTaskComplete
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         titleTextView = findViewById(R.id.pathwaysTitleTextView);
+        titleTextView.setText(R.string.loadingString);
+
 
         SharedPreferences userPreferences = getSharedPreferences("user", 0);
         EmployeeData employee = new EmployeeData(userPreferences);
@@ -73,7 +75,8 @@ public class PathwayActivity extends AppCompatActivity implements OnTaskComplete
         if (pathways.ready()) {
             titleTextView.setText(R.string.pathwaysString);
             recyclerView.setAdapter(pathways);
-        }
+        } else
+            titleTextView.setText(R.string.loadingString);
     }
 
     @Override
