@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.EmployeeData;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.utils.SQLSingleton;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 
@@ -53,6 +54,13 @@ public class LoginActivity extends AppCompatActivity implements OnTaskCompleted 
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         LoginActivity.this.finish();
     }
+
+    @Override
+    protected void onResume() {
+        SQLSingleton.startConnection();
+        super.onResume();
+    }
+
 
     public void signInCallback(View view) {
         employeeData.setLogin(loginEditText.getText().toString());

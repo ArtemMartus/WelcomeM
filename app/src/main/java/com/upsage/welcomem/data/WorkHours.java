@@ -56,42 +56,28 @@ public class WorkHours extends ArrayAdapter<WorkHoursEntry> implements OnTaskCom
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.work_hours_list_item, parent, false);
             }
             TextView workDayTV = convertView.findViewById(R.id.workDayTextView);
-            TextView startHourTV = convertView.findViewById(R.id.startHourTextView);
-            TextView endHourTV = convertView.findViewById(R.id.endHourTextView);
+            TextView finishedHourTV = convertView.findViewById(R.id.finishedHourTextView);
             TextView overtimeTV = convertView.findViewById(R.id.overtimeTextView);
 
-            if (entry.getStartTime() != null) {
+            if (entry.getFinishTime() != null) {
                 workDayTV.setText(getContext().getString(R.string.dayString) +
-                        new SimpleDateFormat("dd/MM/yyyy").format(entry.getStartTime()));
-                startHourTV.setText(getContext().getString(R.string.startString) +
-                        new SimpleDateFormat("HH:mm").format(entry.getStartTime()));
+                        new SimpleDateFormat("dd/MM/yyyy").format(entry.getFinishTime()));
+                finishedHourTV.setText(getContext().getString(R.string.endString) +
+                        new SimpleDateFormat("HH:mm").format(entry.getFinishTime()));
             } else {
                 workDayTV.setText(getContext().getString(R.string.dayString) + "-/-/-");
-                startHourTV.setText(getContext().getString(R.string.startString) + "-:-");
+                finishedHourTV.setText(getContext().getString(R.string.endString) + "-:-");
             }
-            if (entry.getEndTime() != null) {
-                endHourTV.setText(getContext().getString(R.string.endString) +
-                        new SimpleDateFormat("HH:mm").format(entry.getEndTime()));
-            } else {
-                endHourTV.setText(getContext().getString(R.string.endString) + "-:-");
-            }
-            if (entry.getEndTime() != null && entry.getStartTime() != null) {
 
-                int minutes = entry.overtimeMinutes();
 
-                if (minutes > 0) {
-                    int hours = minutes / 60;
-                    minutes -= hours * 60;
-                    overtimeTV.setText(getContext().getString(R.string.overtimeString) +
-                            hours + ":" + minutes);
-                } else {
-                    minutes = -minutes;
-                    int hours = minutes / 60;
-                    minutes -= hours * 60;
-                    overtimeTV.setText(getContext().getString(R.string.shorttimeString) +
-                            hours + ":" + minutes);
-                }
+            int minutes = entry.getOvertiming();
+            int hours = 0;
+            if (minutes > 0) {
+                hours = minutes / 60;
+                minutes -= hours * 60;
             }
+            overtimeTV.setText(hours + ":" + minutes);
+
 
             return convertView;
         } else

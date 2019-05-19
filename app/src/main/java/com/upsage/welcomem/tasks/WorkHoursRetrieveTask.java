@@ -30,7 +30,7 @@ public class WorkHoursRetrieveTask extends AsyncTask<Integer, Void, List<WorkHou
             try {
                 Log.i(TAG, "connection successful");
                 PreparedStatement statement = SQLSingleton.prepareStatement
-                        ("SELECT * from work_reports where employee_id =? order by start_time desc");
+                        ("SELECT * from overtime_history where courier_id =? order by finish_time desc");
                 Log.i(TAG, "created statement");
                 statement.setInt(1, employeeId);
                 ResultSet resultSet = statement.executeQuery();
@@ -39,8 +39,8 @@ public class WorkHoursRetrieveTask extends AsyncTask<Integer, Void, List<WorkHou
                     do {
                         WorkHoursEntry entry = new WorkHoursEntry(
                                 resultSet.getInt("id"),
-                                resultSet.getTimestamp("start_time"),
-                                resultSet.getTimestamp("end_time")
+                                resultSet.getTimestamp("finish_time"),
+                                resultSet.getInt("overtiming_minutes")
                         );
                         entries.add(entry);
                     } while (resultSet.next());
@@ -58,7 +58,7 @@ public class WorkHoursRetrieveTask extends AsyncTask<Integer, Void, List<WorkHou
     @Override
     protected void onPostExecute(List<WorkHoursEntry> entries) {
         if (receiver != null) {
-            Log.i(TAG, "Client we got be like: " + entries);
+            Log.i(TAG, "Work hours we got be like: " + entries);
             receiver.onTaskCompleted(entries);
         }
         super.onPostExecute(entries);

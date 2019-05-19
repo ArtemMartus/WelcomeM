@@ -13,6 +13,7 @@ import com.upsage.welcomem.data.EmployeeData;
 import com.upsage.welcomem.data.Pathways;
 import com.upsage.welcomem.data.entries.PathwayEntry;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.utils.SQLSingleton;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 public class PathwayActivity extends AppCompatActivity implements OnTaskCompleted {
@@ -52,6 +53,8 @@ public class PathwayActivity extends AppCompatActivity implements OnTaskComplete
 
     @Override
     protected void onResume() {
+        SQLSingleton.startConnection();
+
         SharedPreferences userPreferences = getSharedPreferences("user", 0);
         EmployeeData employee = new EmployeeData(userPreferences);
         pathways = new Pathways(employee.getId(), this);

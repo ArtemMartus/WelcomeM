@@ -134,6 +134,12 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
 
     }
 
+    @Override
+    protected void onResume() {
+        SQLSingleton.startConnection();
+        super.onResume();
+    }
+
     @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
     @Override
     public void onTaskCompleted(Object o) {

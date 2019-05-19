@@ -1,25 +1,24 @@
 package com.upsage.welcomem.data.entries;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 
 public class WorkHoursEntry {
     private Integer id;
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private Timestamp finishTime;
+    private Integer overtiming;
 
-    public WorkHoursEntry(Integer id, Timestamp startTime, Timestamp endTime) {
+    public WorkHoursEntry(Integer id, Timestamp finishTime, Integer overtiming) {
         this.id = id;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.finishTime = finishTime;
+        this.overtiming = overtiming;
     }
 
     @Override
     public String toString() {
         return "WorkHoursEntry{" +
                 "id=" + id +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                ", finishTime=" + finishTime +
+                ", overtiming=" + overtiming +
                 '}';
     }
 
@@ -31,39 +30,39 @@ public class WorkHoursEntry {
         this.id = id;
     }
 
-    public Timestamp getStartTime() {
-        return startTime;
+    public Timestamp getFinishTime() {
+        return finishTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
-        this.startTime = startTime;
+    public void setFinishTime(Timestamp finishTime) {
+        this.finishTime = finishTime;
     }
 
-    public Timestamp getEndTime() {
-        return endTime;
+    public Integer getOvertiming() {
+        return overtiming;
     }
 
-    public void setEndTime(Timestamp endTime) {
-        this.endTime = endTime;
+    public void setOvertiming(Integer overtiming) {
+        this.overtiming = overtiming;
     }
 
     public boolean ready() {
-        return id != null && id > 0 && startTime != null && startTime.getTime() > 0;
+        return id != null && id > 0 && finishTime != null && finishTime.getTime() > 0;
     }
 
-    public int overtimeMinutes() {
-        return workMinutes() - 9 * 60;
-    }
+//    public int overtimeMinutes() {
+//        return workMinutes() - 9 * 60;
+//    }
 
-    public int workMinutes() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(getStartTime());
-        int start_minute = calendar.get(Calendar.MINUTE) + calendar.get(Calendar.HOUR_OF_DAY) * 60;
-        calendar.setTime(getEndTime());
-        int end_minute = calendar.get(Calendar.MINUTE) + calendar.get(Calendar.HOUR_OF_DAY) * 60;
-
-
-        return end_minute - start_minute;
-    }
+//    public int workMinutes() {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(getStartTime());
+//        int start_minute = calendar.get(Calendar.MINUTE) + calendar.get(Calendar.HOUR_OF_DAY) * 60;
+//        calendar.setTime(getEndTime());
+//        int end_minute = calendar.get(Calendar.MINUTE) + calendar.get(Calendar.HOUR_OF_DAY) * 60;
+//
+//
+//        return end_minute - start_minute;
+//    }
 }
 

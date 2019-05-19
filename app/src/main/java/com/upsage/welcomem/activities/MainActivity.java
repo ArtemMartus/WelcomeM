@@ -1,7 +1,5 @@
 package com.upsage.welcomem.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,8 +8,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.EmployeeData;
+import com.upsage.welcomem.utils.SQLSingleton;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        SQLSingleton.startConnection();
         super.onResume();
     }
 

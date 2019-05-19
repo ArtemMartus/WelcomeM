@@ -19,6 +19,7 @@ import com.upsage.welcomem.data.entries.OrderInHistoryEntry;
 import com.upsage.welcomem.interfaces.OnItemClick;
 import com.upsage.welcomem.interfaces.OnStartDragListener;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.utils.SQLSingleton;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCompleted, OnItemClick, OnStartDragListener {
@@ -55,6 +56,12 @@ public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCom
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    protected void onResume() {
+        SQLSingleton.startConnection();
+        super.onResume();
     }
 
     @Override

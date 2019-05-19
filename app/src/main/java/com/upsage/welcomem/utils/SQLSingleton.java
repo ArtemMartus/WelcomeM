@@ -21,15 +21,9 @@ public class SQLSingleton {
     public final static int ErrorCode = -1;
 
 
-
     private SQLSingleton() {
         Log.d(TAG, "Initializing sql database stuff");
-        try {
-            connection = DriverManager.getConnection(host, db_user, db_password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            connection = null;
-        }
+        startConnection();
     }
 
     private static void initInstance() throws SQLException {
@@ -46,9 +40,24 @@ public class SQLSingleton {
         return connection.prepareStatement(sql);
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        connection.close();
-        super.finalize();
+    public static void startConnection() {
+        try {
+            if (connection == null || connection.isClosed())
+                connection = DriverManager.getConnection(host, db_user, db_password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connection = null;
+        }
+    }
+
+    public static void stopConnection() {
+        try {
+            if (connection != null) {
+                connection.close();
+                connection = null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

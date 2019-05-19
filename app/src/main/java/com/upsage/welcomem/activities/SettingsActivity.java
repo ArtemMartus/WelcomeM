@@ -1,14 +1,14 @@
 package com.upsage.welcomem.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.upsage.welcomem.R;
+import com.upsage.welcomem.utils.SQLSingleton;
 import com.upsage.welcomem.utils.ThemeStyle;
 import com.upsage.welcomem.utils.ThemeUtil;
 
@@ -78,6 +78,13 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @Override
+    protected void onResume() {
+        SQLSingleton.startConnection();
+        super.onResume();
+    }
+
 
     void changeTheme(ThemeStyle style) {
         ThemeUtil.changeToTheme(this, style);

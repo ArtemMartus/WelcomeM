@@ -17,6 +17,7 @@ import com.google.zxing.Result;
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.Order;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
+import com.upsage.welcomem.utils.SQLSingleton;
 import com.upsage.welcomem.utils.ThemeUtil;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -79,6 +80,8 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
     @Override
     public void onResume() {
+        SQLSingleton.startConnection();
+
         super.onResume();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
