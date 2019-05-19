@@ -44,8 +44,6 @@ public class OrdersInHistory extends RecyclerView.Adapter<OrderInHistoryViewHold
         if ((o instanceof List)) {
             entries.addAll((List<OrderInHistoryEntry>) o);
             notifyDataSetChanged();
-        } else {
-            //Toast.makeText(getContext(), R.string.sqlErrorRetryString, Toast.LENGTH_SHORT).show();
         }
 
         if (receiver != null)
@@ -79,12 +77,6 @@ public class OrdersInHistory extends RecyclerView.Adapter<OrderInHistoryViewHold
         OrderInHistoryViewHolder holder = new OrderInHistoryViewHolder(inflatedView);
         if (onItemClick != null)
             inflatedView.setOnClickListener(v -> onItemClick.OnItemClick(v, holder.getAdapterPosition()));
-        /*inflatedView.setOnTouchListener((v, event) -> {
-            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                mDragStartListener.onStartDrag(holder);
-            }
-            return false;
-        });*/
 
         return holder;
     }

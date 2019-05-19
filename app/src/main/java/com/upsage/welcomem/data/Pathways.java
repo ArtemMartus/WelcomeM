@@ -4,43 +4,54 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.upsage.welcomem.R;
 import com.upsage.welcomem.data.entries.PathwayEntry;
+import com.upsage.welcomem.data.viewholders.PathwayEntryViewHolder;
+import com.upsage.welcomem.interfaces.ItemDragHelperAdapter;
+import com.upsage.welcomem.interfaces.OnItemClick;
+import com.upsage.welcomem.interfaces.OnStartDragListener;
 import com.upsage.welcomem.interfaces.OnTaskCompleted;
 import com.upsage.welcomem.tasks.PathwaysRetrieveTask;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Pathways extends ArrayAdapter<PathwayEntry> implements OnTaskCompleted {
-    private Integer courierId;
-    private OnTaskCompleted receiver;
+public class Pathways extends RecyclerView.Adapter<PathwayEntryViewHolder> implements
+        OnTaskCompleted, ItemDragHelperAdapter {
 
-    public Pathways(Integer courierId, Context context) {
-        super(context, R.layout.pathway_item);
+    private final OnStartDragListener mDragStartListener;
+    private final OnItemClick onItemClick;
+    private final Context context;
+    private OnTaskCompleted receiver;
+    private List<PathwayEntry> entries = new ArrayList<>();
+    private Integer courierId;
+
+    public Pathways(Integer courierId, OnItemClick onItemClick, OnStartDragListener dragListener,
+                    Context context) {
         this.courierId = courierId;
+        this.context = context;
+        this.onItemClick = onItemClick;
+        mDragStartListener = dragListener;
     }
 
     @Override
     public void onTaskCompleted(Object o) {
         if ((o instanceof List)) {
-            addAll((List<PathwayEntry>) o);
+            entries.addAll((List<PathwayEntry>) o);
             notifyDataSetChanged();
-        } else {
-            Toast.makeText(getContext(), R.string.sqlErrorRetryString, Toast.LENGTH_SHORT).show();
         }
 
         if (receiver != null)
             receiver.onTaskCompleted(null);
 
-        if (getCount() == 0) {
-            Toast.makeText(getContext(), R.string.seemsYouveDoneYourWorkForTodayString, Toast.LENGTH_SHORT).show();
+        if (entries.size() == 0 && context != null) {
+            Toast.makeText(context, R.string.seemsYouveDoneYourWorkForTodayString, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -50,32 +61,53 @@ public class Pathways extends ArrayAdapter<PathwayEntry> implements OnTaskComple
         task.execute(courierId);
     }
 
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        PathwayEntry entry = getItem(position);
-        if (entry != null && entry.ready()) {
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.pathway_item, parent, false);
-            }
-            TextView orderIdTV = convertView.findViewById(R.id.pathOrderIdTextView);
-            TextView addressTV = convertView.findViewById(R.id.pathAddressTextView);
-
-            String str = getContext().getString(R.string.orderIdString) + entry.getId();
-            orderIdTV.setText(str);
-            addressTV.setText(entry.getAddress());
-
-            return convertView;
-        } else
-            return super.getView(position, convertView, parent);
-    }
-
     public boolean ready() {
-        for (int i = 0; i < getCount(); ++i) {
-            PathwayEntry item = getItem(i);
+        for (PathwayEntry item : entries)
             if (item != null && !item.ready())
                 return false;
-        }
+
         return true;
     }
+
+    @NonNull
+    @Override
+    public PathwayEntryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View inflatedView = inflater.inflate(R.layout.pathway_item, parent, false);
+        PathwayEntryViewHolder holder = new PathwayEntryViewHolder(inflatedView);
+        if (onItemClick != null)
+            inflatedView.setOnClickListener(v -> onItemClick.OnItemClick(v, holder.getAdapterPosition()));
+
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull PathwayEntryViewHolder holder, int position) {
+        PathwayEntry entry = entries.get(position);
+        String orderIdString = context.getString(R.string.orderIdString) + entry.getId();
+        holder.setData(orderIdString, entry.getAddress());
+    }
+
+    @Override
+    public int getItemCount() {
+        return entries.size();
+    }
+
+    public PathwayEntry getItem(int position) {
+        try {
+            return entries.get(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(entries, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
 }

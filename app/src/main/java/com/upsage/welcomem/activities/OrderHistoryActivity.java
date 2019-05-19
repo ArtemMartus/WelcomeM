@@ -29,6 +29,8 @@ public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCom
     private TextView titleTextView;
     private ItemTouchHelper itemTouchHelper;
 
+    //todo add ability to permanently remove item from this history on local machine
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtil.onCreateSetTheme(this);
@@ -54,11 +56,6 @@ public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCom
     }
 
     @Override
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        itemTouchHelper.startDrag(viewHolder);
-    }
-
-    @Override
     protected void onResume() {
         SQLSingleton.startConnection();
         super.onResume();
@@ -72,6 +69,11 @@ public class OrderHistoryActivity extends AppCompatActivity implements OnTaskCom
         } else {
             titleTextView.setText(R.string.loadingString);
         }
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
     }
 
     @Override
