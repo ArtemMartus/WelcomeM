@@ -19,10 +19,10 @@ public class PaymentTask extends AsyncTask<Double, Void, Integer> {
 
     @Override
     protected Integer doInBackground(Double... args) {
-        if (args.length >= 3
-                && args[0] != null
-                && args[1] != null
-                && args[2] != null
+        if (args.length >= 3 // должно быть 3 аргумента
+                && args[0] != null // проверим id заказа
+                && args[1] != null // проверим id клиента
+                && args[2] != null // проверим новый баланс
         ) {
 
 
@@ -32,10 +32,10 @@ public class PaymentTask extends AsyncTask<Double, Void, Integer> {
 
 
             try {
-                Log.i(TAG, "connection successful");
+
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("UPDATE `orders` SET `delivery_date` = NOW() WHERE (`id` = ?)");
-                Log.i(TAG, "created statement");
+
                 statement.setInt(1, orderId);
                 statement.execute();
                 statement.close();
@@ -53,7 +53,7 @@ public class PaymentTask extends AsyncTask<Double, Void, Integer> {
             }
             return SQLSingleton.SuccessfulPaymentCode;
         }
-        return SQLSingleton.ErrorCode;
+        return SQLSingleton.ErrorCode; // на выход функция отправляет код
     }
 
     @Override

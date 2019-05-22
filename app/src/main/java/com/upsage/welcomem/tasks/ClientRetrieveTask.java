@@ -12,9 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ClientRetrieveTask extends AsyncTask<Client, Void, Client> {
-    private final static String host = "jdbc:mysql://remotemysql.com:3306/XN5vmpIBV5";
-    private final static String db_user = "XN5vmpIBV5";
-    private final static String db_password = "3KW9meu7IL";
+
     private final static String TAG = "Client retriever task";
     private OnTaskCompleted receiver;
 
@@ -26,13 +24,16 @@ public class ClientRetrieveTask extends AsyncTask<Client, Void, Client> {
     protected Client doInBackground(Client... args) {
         Client client = null;
         if (args.length > 0 && args[0] != null) {
-            Client clientData = args[0];
+            Integer clientId = args[0].getId(); // Получаем ID клиента из аргумента
             try {
-                Log.i(TAG, "connection successful");
+
+                // формируем sql запрос используя созданное соединение
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT * from clients where id =?");
-                Log.i(TAG, "created statement");
-                statement.setInt(1, clientData.getId());
+
+                // устанавливаем вместо ? ID клиента
+                statement.setInt(1, clientId);
+                //получаем ответ
                 ResultSet resultSet = statement.executeQuery();
 
                 if (resultSet.first()) {
@@ -52,14 +53,15 @@ public class ClientRetrieveTask extends AsyncTask<Client, Void, Client> {
                 e.printStackTrace();
             }
         }
+        // объект client идет в функцию onPostExecute как аргумент
         return client;
     }
 
     @Override
     protected void onPostExecute(Client clientData) {
-        if (receiver != null) {
+        if (receiver != null) { // а здесь мы уже проверим есть ли получатель-функция (callback)
             Log.i(TAG, "Client we got be like: " + clientData);
-            receiver.onTaskCompleted(clientData);
+            receiver.onTaskCompleted(clientData); // если есть - вызываем
         }
         super.onPostExecute(clientData);
     }

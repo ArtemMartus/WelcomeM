@@ -29,10 +29,10 @@ public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<Orde
         if (args.length > 0 && args[0] != null) {
             Integer employeeId = args[0];
             try {
-                Log.i(TAG, "connection successful");
+
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT id,client_id,delivery_date from orders where courier_id =? and delivery_date is not null order by delivery_date asc");
-                Log.i(TAG, "created statement");
+
                 statement.setInt(1, employeeId);
                 ResultSet resultSet = statement.executeQuery();
 
@@ -41,7 +41,7 @@ public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<Orde
                         int orderId = resultSet.getInt("id");
                         int clientId = resultSet.getInt("client_id");
                         Timestamp delivery = resultSet.getTimestamp("delivery_date");
-                        String clientName = "";
+                        String clientName;
                         {
                             PreparedStatement clientStatement = SQLSingleton.prepareStatement(
                                     "select name from clients where id = ?");
@@ -72,7 +72,6 @@ public class OrderHistoryRetrieveTask extends AsyncTask<Integer, Void, List<Orde
                 statement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
-//                orders = null;
             }
         }
         return orders;

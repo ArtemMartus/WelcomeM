@@ -27,9 +27,10 @@ public class ProductsRetrieveTask extends AsyncTask<Set<Integer>, Void, List<Pro
     protected List<ProductEntry> doInBackground(Set<Integer>... args) {
         List<ProductEntry> products = new LinkedList<>();
         if (args.length > 0 && args[0] != null) {
-            Set<Integer> prodIds = args[0];
+
+            Set<Integer> prodIds = args[0]; // коллекция set это массив уникальных элементов
             try {
-                Log.i(TAG, "connection successful");
+
 
                 for (Integer id :
                         prodIds) {

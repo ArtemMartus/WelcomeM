@@ -27,12 +27,10 @@ public class OvertimesRetrieveTask extends AsyncTask<Integer, Void, List<Overtim
         if (args.length > 0 && args[0] != null) {
             Integer courierId = args[0];
             try {
-                Log.i(TAG, "connection successful");
-
 
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT * from overtime_history where courier_id =? and overtiming_minutes > 0 order by finish_time asc limit 60");
-                Log.i(TAG, "created statement");
+
                 statement.setInt(1, courierId);
                 ResultSet resultSet = statement.executeQuery();
 

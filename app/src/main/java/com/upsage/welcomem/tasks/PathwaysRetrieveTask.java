@@ -28,21 +28,21 @@ public class PathwaysRetrieveTask extends AsyncTask<Integer, Void, List<PathwayE
         if (args.length > 0 && args[0] != null) {
             Integer courierId = args[0];
             try {
-                Log.i(TAG, "connection successful");
+
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT id,delivery_address from orders where courier_id =? and delivery_date is NULL");
-                Log.i(TAG, "created statement");
+
                 statement.setInt(1, courierId);
                 ResultSet resultSet = statement.executeQuery();
 
-                if (resultSet.first()) {
+                if (resultSet.first()) { // так как нам нужны все записи - результатом будет список
                     do {
                         PathwayEntry entry = new PathwayEntry(
                                 resultSet.getInt("id"),
                                 resultSet.getString("delivery_address")
                         );
                         orders.add(entry);
-                    } while (resultSet.next());
+                    } while (resultSet.next());// пока есть следующий элемент в результатах - выполняем цыкл
                 }
                 resultSet.close();
                 statement.close();

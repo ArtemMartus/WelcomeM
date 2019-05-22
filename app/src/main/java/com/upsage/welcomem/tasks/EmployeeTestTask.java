@@ -24,21 +24,22 @@ public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData
     protected EmployeeData doInBackground(EmployeeData... args) {
         EmployeeData employee = null;
         if (args.length > 0 && args[0] != null) {
-            EmployeeData credential = args[0];
+
+            EmployeeData credential = args[0]; // получаем данные сотрудника из аргумента
             try {
-                Log.i(TAG, "connection successful");
 
                 PreparedStatement statement;
-                if (credential.isNotEmpty()) {
+                if (credential.isNotEmpty()) {// если в данных есть логин и пароль - формируем запрос с использованием этих данных
+
                     statement = SQLSingleton.prepareStatement
                             ("SELECT * from employees where login =? and password =?");
-                    Log.i(TAG, "created statement for login and password");
+
                     statement.setString(1, credential.getLogin());
                     statement.setString(2, credential.getPassword());
-                } else {
+                } else {// если только id - запрос другой
                     statement = SQLSingleton.prepareStatement
                             ("SELECT * from employees where id =?");
-                    Log.i(TAG, "created statement for id");
+
                     statement.setInt(1, credential.getId());
                 }
                 ResultSet resultSet = statement.executeQuery();
@@ -46,7 +47,7 @@ public class EmployeeTestTask extends AsyncTask<EmployeeData, Void, EmployeeData
                 if (resultSet.first()) {
                     String login;
                     String password;
-                    if (credential.isNotEmpty()) {
+                    if (credential.isNotEmpty()) { // если нам изначально не поступали логин и пароль - оставим поля пустыми
                         login = resultSet.getString("login");
                         password = resultSet.getString("password");
                     } else {

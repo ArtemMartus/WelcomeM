@@ -34,11 +34,11 @@ public class RecordEndOfaDayTask extends AsyncTask<Integer, Void, Integer> {
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("INSERT INTO overtime_history " +
                                 "(`courier_id`, `finish_time`, `overtiming_minutes`) " +
-                                "VALUES (?, ?, ?)");
+                                "VALUES (?, ?, ?)"); // VALUES ( parameterIndex:1, :2, :3)
                 Log.i(TAG, "created statement");
 
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                statement.setTimestamp(2, timestamp);
+                statement.setTimestamp(2, timestamp); // :2
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(timestamp);
@@ -49,13 +49,13 @@ public class RecordEndOfaDayTask extends AsyncTask<Integer, Void, Integer> {
                 if (currentHours > 0 || (currentHours == 0 && currentMinutes > 0)) {
 
                     currentMinutes += currentHours * 60;
-                    statement.setInt(3, currentMinutes);
+                    statement.setInt(3, currentMinutes); // :3
 
                 } else {
-                    statement.setInt(3, 0);
+                    statement.setInt(3, 0);  //  :3
                 }
 
-                statement.setInt(1, courierId);
+                statement.setInt(1, courierId);  // :1
                 statement.execute();
                 statement.close();
 

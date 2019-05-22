@@ -25,13 +25,14 @@ public class WorkHoursRetrieveTask extends AsyncTask<Integer, Void, List<WorkHou
     @Override
     protected List<WorkHoursEntry> doInBackground(Integer... args) {
         List<WorkHoursEntry> entries = new LinkedList<>();
+
         if (args.length > 0 && args[0] != null) {
             Integer employeeId = args[0];
             try {
-                Log.i(TAG, "connection successful");
+
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT * from overtime_history where courier_id =? order by finish_time desc");
-                Log.i(TAG, "created statement");
+
                 statement.setInt(1, employeeId);
                 ResultSet resultSet = statement.executeQuery();
 

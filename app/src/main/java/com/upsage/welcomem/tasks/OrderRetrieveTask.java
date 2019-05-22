@@ -23,13 +23,15 @@ public class OrderRetrieveTask extends AsyncTask<Order,Void,Order> {
     protected Order doInBackground(Order... args) {
         Order order = null;
         if (args.length > 0 && args[0] != null) {
-            Order orderData = args[0];
+
+            Integer orderData = args[0].getId();
+
             try {
                 Log.i(TAG, "connection successful");
                 PreparedStatement statement = SQLSingleton.prepareStatement
                         ("SELECT * from orders where id =?");
                 Log.i(TAG, "created statement");
-                statement.setInt(1, orderData.getId());
+                statement.setInt(1, orderData);
                 ResultSet resultSet = statement.executeQuery();
 
                 if (resultSet.first()) {
