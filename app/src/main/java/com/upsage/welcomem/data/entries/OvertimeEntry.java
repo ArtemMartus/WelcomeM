@@ -30,19 +30,8 @@ public class OvertimeEntry {
         this.id = id;
     }
 
-    public Timestamp getFinishTime() {
-        return finishTime;
-    }
-
-    public void setFinishTime(Timestamp finishTime) {
-        this.finishTime = finishTime;
-    }
-
     public Integer getOvertimingMinutes() {
         return overtimingMinutes;
     }
 
-    public void setOvertimingMinutes(Integer overtimingMinutes) {
-        this.overtimingMinutes = overtimingMinutes;
-    }
 }

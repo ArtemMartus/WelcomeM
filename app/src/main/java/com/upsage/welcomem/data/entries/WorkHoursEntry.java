@@ -34,16 +34,8 @@ public class WorkHoursEntry {
         return finishTime;
     }
 
-    public void setFinishTime(Timestamp finishTime) {
-        this.finishTime = finishTime;
-    }
-
     public Integer getOvertiming() {
         return overtiming;
-    }
-
-    public void setOvertiming(Integer overtiming) {
-        this.overtiming = overtiming;
     }
 
     public boolean ready() {

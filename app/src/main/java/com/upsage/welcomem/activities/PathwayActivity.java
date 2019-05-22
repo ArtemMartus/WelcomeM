@@ -29,8 +29,6 @@ public class PathwayActivity extends AppCompatActivity implements OnTaskComplete
     private RecyclerView recyclerView;
     private TextView titleTextView;
 
-    //todo make drag and drop functionality
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtil.onCreateSetTheme(this);

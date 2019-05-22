@@ -56,22 +56,6 @@ public class Products implements OnTaskCompleted {
             receiver.onTaskCompleted(o);
     }
 
-    public Set<Integer> getProductIds() {
-        return productIds;
-    }
-
-    public void setProductIds(Set<Integer> productIds) {
-        this.productIds = productIds;
-    }
-
-    public List<ProductEntry> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<ProductEntry> products) {
-        this.products = products;
-    }
-
     public Double getPrice() {
         if (!ready())
             return 0.0;

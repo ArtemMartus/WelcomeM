@@ -5,10 +5,10 @@ import com.upsage.welcomem.interfaces.HasId;
 import java.sql.Timestamp;
 
 public class OrderInHistoryEntry implements HasId {
-    private Integer id = -1;
-    private Integer clientId = -1;
+    private Integer id;
+    private Integer clientId;
     private Timestamp deliveryDate;
-    private Integer courier_id = -1;
+    private Integer courier_id;
     private String clientName;
 
     public OrderInHistoryEntry(Integer id, Integer clientId, Timestamp deliveryDate, Integer courier_id, String clientName) {
@@ -34,28 +34,8 @@ public class OrderInHistoryEntry implements HasId {
                 '}';
     }
 
-    public Integer getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(Integer clientId) {
-        this.clientId = clientId;
-    }
-
     public Timestamp getDeliveryDate() {
         return deliveryDate;
-    }
-
-    public void setDeliveryDate(Timestamp deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
-
-    public Integer getCourier_id() {
-        return courier_id;
-    }
-
-    public void setCourier_id(Integer courier_id) {
-        this.courier_id = courier_id;
     }
 
     public Integer getId() {
@@ -70,7 +50,4 @@ public class OrderInHistoryEntry implements HasId {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
 }

@@ -143,10 +143,6 @@ public class EmployeeData implements OnTaskCompleted {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -155,28 +151,8 @@ public class EmployeeData implements OnTaskCompleted {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getTelNumber() {
         return telNumber;
-    }
-
-    public void setTelNumber(String telNumber) {
-        this.telNumber = telNumber;
     }
 
     @Override

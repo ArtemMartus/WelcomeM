@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class OvertimeHistory implements OnTaskCompleted {
-    private static final String TAG = "Products log";
     private OnTaskCompleted receiver;
     private Integer courierId;
     private List<OvertimeEntry> overtimeList;

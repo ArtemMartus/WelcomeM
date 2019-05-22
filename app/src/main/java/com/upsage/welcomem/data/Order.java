@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class Order implements OnTaskCompleted {
 
     private OnTaskCompleted receiver;
-    private Integer id = -1;
+    private Integer id;
     private Integer clientId = -1;
     private String productsId = "";
     private Double quantity = -1.0;
@@ -89,10 +89,6 @@ public class Order implements OnTaskCompleted {
         return courierId;
     }
 
-    public void setCourierId(Integer courierId) {
-        this.courierId = courierId;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -113,56 +109,20 @@ public class Order implements OnTaskCompleted {
         return productsId;
     }
 
-    public void setProductsId(String productsId) {
-        this.productsId = productsId;
-    }
-
-    public Double getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Double quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getSum() {
-        return sum;
-    }
-
-    public void setSum(Double sum) {
-        this.sum = sum;
-    }
-
     public String getCurrency() {
         return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public String getDeliveryAddress() {
         return deliveryAddress;
     }
 
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
     public Timestamp getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(Timestamp deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
-
     public Integer getManagerId() {
         return managerId;
-    }
-
-    public void setManagerId(Integer managerId) {
-        this.managerId = managerId;
     }
 
     @Override

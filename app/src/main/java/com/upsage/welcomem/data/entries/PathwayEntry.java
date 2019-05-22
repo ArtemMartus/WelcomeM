@@ -5,7 +5,7 @@ import com.upsage.welcomem.interfaces.HasId;
 import java.util.Objects;
 
 public class PathwayEntry implements HasId {
-    private Integer id = -1;
+    private Integer id;
     private String address;
 
     public PathwayEntry(Integer id, String address) {
@@ -27,10 +27,6 @@ public class PathwayEntry implements HasId {
 
     public String getAddress() {
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     @Override
