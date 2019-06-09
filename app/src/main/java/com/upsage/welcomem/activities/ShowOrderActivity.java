@@ -1,6 +1,7 @@
 package com.upsage.welcomem.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -29,9 +30,14 @@ import com.upsage.welcomem.utils.SQLSingleton;
 import com.upsage.welcomem.utils.ThemeStyle;
 import com.upsage.welcomem.utils.ThemeUtil;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 public class ShowOrderActivity extends AppCompatActivity implements OnTaskCompleted {
     private final static String TAG = "Show Order Activity";
@@ -239,8 +245,8 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
             orderLayout.removeView(payOrderButton);
             orderLayout.removeView(moneyGivenByClientEditText);
             orderPaidTextView.setVisibility(View.VISIBLE);
-            orderPaidTextView.setText(getString(R.string.deliveredString) +
-                    new SimpleDateFormat("dd/MM/yyyy HH:ss").format(order.getDeliveryDate()));
+            orderPaidTextView.setText(getString(R.string.deliveredString) + getDate("dd/MM/yyyy HH:mm",
+                    order.getDeliveryDate()) );
         }
 
 
@@ -279,5 +285,13 @@ public class ShowOrderActivity extends AppCompatActivity implements OnTaskComple
             recommendedPriceToPayTextView.setText(R.string.loadingString);
         }
         orderAddressTextView.setText(getString(R.string.addressString) + order.getDeliveryAddress());
+    }
+
+    public static String getDate(String pattern,Timestamp timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern,
+                java.util.Locale.getDefault());
+        int offset = TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings();
+        long now = timestamp.getTime() + offset;
+        return sdf.format(new Date(now));
     }
 }

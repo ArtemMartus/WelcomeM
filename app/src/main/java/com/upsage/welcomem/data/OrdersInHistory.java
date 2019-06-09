@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.upsage.welcomem.activities.ShowOrderActivity.getDate;
+
 public class OrdersInHistory extends RecyclerView.Adapter<OrderInHistoryViewHolder> implements
         OnTaskCompleted, ItemTouchHelperAdapter {
     private Integer employeeId;
@@ -102,7 +104,7 @@ public class OrdersInHistory extends RecyclerView.Adapter<OrderInHistoryViewHold
         OrderInHistoryEntry entry = entries.get(position);
         String orderIdString = context.getString(R.string.orderIdString) + entry.getId();
         @SuppressLint("SimpleDateFormat")
-        String deliveryDateString = new SimpleDateFormat("dd/MM/yyyy HH:ss").format(entry.getDeliveryDate());
+        String deliveryDateString = getDate("dd/MM/yyyy HH:ss",entry.getDeliveryDate());
         holder.setData(orderIdString, entry.getClientName(), deliveryDateString);
 
     }

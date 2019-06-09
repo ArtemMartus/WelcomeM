@@ -8,6 +8,12 @@ import com.upsage.welcomem.utils.SQLSingleton;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class PaymentTask extends AsyncTask<Double, Void, Integer> {
     private final static String TAG = "Paths retriever task";
@@ -34,7 +40,7 @@ public class PaymentTask extends AsyncTask<Double, Void, Integer> {
             try {
 
                 PreparedStatement statement = SQLSingleton.prepareStatement
-                        ("UPDATE `orders` SET `delivery_date` = NOW() WHERE (`id` = ?)");
+                        ("UPDATE `orders` SET `delivery_date` = now() WHERE (`id` = ?)");
 
                 statement.setInt(1, orderId);
                 statement.execute();

@@ -16,7 +16,6 @@ public class OvertimeHistory implements OnTaskCompleted {
         this.courierId = courierId;
     }
 
-    @SuppressWarnings("unchecked")
     public void test(OnTaskCompleted receiver) {
         this.receiver = receiver;
         OvertimesRetrieveTask task = new OvertimesRetrieveTask(this);
