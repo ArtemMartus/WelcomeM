@@ -19,8 +19,6 @@ import com.upsage.welcomem.tasks.WorkHoursRetrieveTask;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static com.upsage.welcomem.activities.ShowOrderActivity.getDate;
-
 public class WorkHours extends ArrayAdapter<WorkHoursEntry> implements OnTaskCompleted {
 
     private OnTaskCompleted receiver;
@@ -63,9 +61,9 @@ public class WorkHours extends ArrayAdapter<WorkHoursEntry> implements OnTaskCom
 
             if (entry.getFinishTime() != null) {
                 workDayTV.setText(getContext().getString(R.string.dayString) +
-                        getDate("dd/MM/yyyy",entry.getFinishTime()));
+                        new SimpleDateFormat("dd/MM/yyyy").format(entry.getFinishTime()));
                 finishedHourTV.setText(getContext().getString(R.string.endString) +
-                        getDate("HH:mm",entry.getFinishTime()));
+                        new SimpleDateFormat("HH:mm").format(entry.getFinishTime()));
             } else {
                 workDayTV.setText(getContext().getString(R.string.dayString) + "-/-/-");
                 finishedHourTV.setText(getContext().getString(R.string.endString) + "-:-");
